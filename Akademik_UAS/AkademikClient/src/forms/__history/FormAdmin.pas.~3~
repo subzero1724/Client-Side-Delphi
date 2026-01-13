@@ -1,0 +1,34 @@
+unit FormAdmin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids,
+  System.JSON,
+  ApiClient, SessionManager;
+
+type
+  TFrmAdmin = class(TForm)
+    Label1: TLabel;
+    btnDosen: TButton;
+    btnMahasiswa: TButton;
+    btnMK: TButton;
+    btnLogout: TButton;
+    sgData: TStringGrid;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAdmin: TFrmAdmin;
+
+implementation
+
+{$R *.dfm}
+
+end.

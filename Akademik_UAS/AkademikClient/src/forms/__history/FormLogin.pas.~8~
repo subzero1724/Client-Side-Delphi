@@ -1,0 +1,65 @@
+﻿procedure TFrmLogin.DoLogin;
+var
+  Body, Data: TJSONObject;
+  Response: TJSONObject;
+  User: TUser;
+begin
+  if (edtUsername.Text = '') or (edtPassword.Text = '') then
+  begin
+    ShowMessage('Username dan password wajib diisi');
+    Exit;
+  end;
+
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('username', edtUsername.Text);
+    Body.AddPair('password', edtPassword.Text);
+
+    Response := TApiClient.Post('/auth/login.php', Body);
+
+    if not Response.GetValue('status').AsType<Boolean> then
+    begin
+      ShowMessage(Response.GetValue('message').Value);
+      Exit;
+    end;
+
+    Data := Response.GetValue('data') as TJSONObject;
+    User := TUser.CreateFromJSON(Data);
+
+    // ✅ simpan session
+    TSessionManager.SetSession(
+      User.Token,
+      User.Role,
+      User.Username
+    );
+
+    // ✅ redirect sesuai role
+    if User.Role = 'admin' then
+    begin
+      FrmAdmin := TFrmAdmin.Create(Application);
+      FrmAdmin.Show;
+    end
+    else if User.Role = 'dosen' then
+    begin
+      FormDosen := TFormDosen.Create(Application);
+      FormDosen.Show;
+    end
+    else if User.Role = 'mahasiswa' then
+    begin
+      FormMahasiswa := TFormMahasiswa.Create(Application);
+      FormMahasiswa.Show;
+    end
+    else
+    begin
+      ShowMessage('Role tidak dikenali');
+      Exit;
+    end;
+
+    // ✅ sembunyikan login
+    Self.Hide;
+
+  finally
+    Body.Free;
+  end;
+end;
+

@@ -1,0 +1,23 @@
+unit SessionManager;
+
+interface
+
+type
+  TSessionManager = class
+  private
+    class var FToken: string;
+    class var FRole: string;
+    class var FUsername: string;
+  public
+    class procedure SetSession(AToken, ARole, AUsername: string);
+    class procedure ClearSession;
+
+    class function GetToken: string;
+    class function GetRole: string;
+    class function GetUsername: string;
+    class function IsLoggedIn: Boolean;
+  end;
+
+implementation
+
+end.

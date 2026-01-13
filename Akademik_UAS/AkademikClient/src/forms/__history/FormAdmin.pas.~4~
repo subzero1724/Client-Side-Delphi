@@ -1,0 +1,117 @@
+unit FormAdmin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids,
+  System.JSON,
+  ApiClient, SessionManager;
+
+type
+  TFrmAdmin = class(TForm)
+    Label1: TLabel;
+    btnDosen: TButton;
+    btnMahasiswa: TButton;
+    btnMK: TButton;
+    btnLogout: TButton;
+    sgData: TStringGrid;
+    procedure FormShow(Sender: TObject);
+    procedure btnDosenClick(Sender: TObject);
+    procedure btnMahasiswaClick(Sender: TObject);
+    procedure btnMKClick(Sender: TObject);
+    procedure btnLogoutClick(Sender: TObject);
+  private
+    procedure InitGrid;
+    procedure LoadMataKuliah;
+  public
+  end;
+
+var
+  FrmAdmin: TFrmAdmin;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmAdmin.FormShow(Sender: TObject);
+begin
+  // role guard UI
+  if TSessionManager.GetRole <> 'admin' then
+  begin
+    ShowMessage('Akses ditolak');
+    Close;
+    Exit;
+  end;
+
+  Label1.Caption := 'ADMIN PANEL';
+  InitGrid;
+end;
+
+procedure TFrmAdmin.InitGrid;
+begin
+  sgData.ColCount := 4;
+  sgData.RowCount := 1;
+
+  sgData.Cells[0,0] := 'Kode MK';
+  sgData.Cells[1,0] := 'Nama MK';
+  sgData.Cells[2,0] := 'SKS';
+  sgData.Cells[3,0] := 'Dosen';
+end;
+
+procedure TFrmAdmin.LoadMataKuliah;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  I: Integer;
+begin
+  Res := TApiClient.Get('/admin/list_mk.php');
+
+  if not Res.GetValue('status').AsType<Boolean> then
+  begin
+    ShowMessage(Res.GetValue('message').Value);
+    Exit;
+  end;
+
+  Arr := Res.GetValue('data') as TJSONArray;
+
+  sgData.RowCount := Arr.Count + 1;
+
+  for I := 0 to Arr.Count - 1 do
+  begin
+    sgData.Cells[0, I+1] := Arr.Items[I].GetValue('kode_mk').Value;
+    sgData.Cells[1, I+1] := Arr.Items[I].GetValue('nama_mk').Value;
+    sgData.Cells[2, I+1] := Arr.Items[I].GetValue('sks').Value;
+    sgData.Cells[3, I+1] := Arr.Items[I].GetValue('nama_dosen').Value;
+  end;
+end;
+
+procedure TFrmAdmin.btnMKClick(Sender: TObject);
+begin
+  LoadMataKuliah;
+end;
+
+procedure TFrmAdmin.btnLogoutClick(Sender: TObject);
+begin
+  if MessageDlg('Logout?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    TSessionManager.ClearSession;
+    Close;
+    Application.MainForm.Show;
+  end;
+end;
+
+procedure TFrmAdmin.btnDosenClick(Sender: TObject);
+begin
+  ShowMessage('Menu Dosen belum dibuat');
+end;
+
+procedure TFrmAdmin.btnMahasiswaClick(Sender: TObject);
+begin
+  ShowMessage('Menu Mahasiswa belum dibuat');
+end;
+
+end.
+

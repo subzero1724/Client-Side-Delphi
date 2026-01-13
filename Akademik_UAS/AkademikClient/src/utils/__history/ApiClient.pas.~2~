@@ -1,0 +1,28 @@
+unit ApiClient;
+
+interface
+
+uses
+  System.SysUtils, System.Classes,
+  System.JSON,
+  System.Net.URLClient,
+  System.Net.HttpClient,
+  System.Net.HttpClientComponent,
+  AppConfig, SessionManager;
+
+type
+  TApiClient = class
+  public
+    class function Post(
+      Endpoint: string;
+      Body: TJSONObject
+    ): TJSONObject;
+
+    class function Get(
+      Endpoint: string
+    ): TJSONObject;
+  end;
+
+implementation
+
+end.

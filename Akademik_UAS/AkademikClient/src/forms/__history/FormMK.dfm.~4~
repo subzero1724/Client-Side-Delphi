@@ -1,0 +1,124 @@
+object FrmMK: TFrmMK
+  Left = 0
+  Top = 0
+  Caption = 'Kelola Mata Kuliah'
+  ClientHeight = 341
+  ClientWidth = 635
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 280
+    Top = 48
+    Width = 126
+    Height = 25
+    Caption = 'Mata Kuliah'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 88
+    Top = 99
+    Width = 82
+    Height = 13
+    Caption = 'Kode Mata Kuliah'
+  end
+  object Label3: TLabel
+    Left = 88
+    Top = 176
+    Width = 83
+    Height = 13
+    Caption = 'Dosen Pengampu'
+  end
+  object Label4: TLabel
+    Left = 88
+    Top = 133
+    Width = 85
+    Height = 13
+    Caption = 'Nama Mata Kuliah'
+  end
+  object Label5: TLabel
+    Left = 88
+    Top = 216
+    Width = 18
+    Height = 13
+    Caption = 'SKS'
+  end
+  object StringGrid1: TStringGrid
+    Left = 355
+    Top = 96
+    Width = 262
+    Height = 209
+    TabOrder = 0
+  end
+  object edtKode: TEdit
+    Left = 192
+    Top = 96
+    Width = 121
+    Height = 21
+    TabOrder = 1
+  end
+  object edtNama: TEdit
+    Left = 192
+    Top = 130
+    Width = 121
+    Height = 21
+    TabOrder = 2
+  end
+  object edtSKS: TEdit
+    Left = 192
+    Top = 213
+    Width = 121
+    Height = 21
+    TabOrder = 3
+  end
+  object cbDosen: TComboBox
+    Left = 192
+    Top = 173
+    Width = 121
+    Height = 21
+    TabOrder = 4
+  end
+  object btnTambah: TButton
+    Left = 88
+    Top = 248
+    Width = 98
+    Height = 25
+    Caption = 'Add'
+    TabOrder = 5
+  end
+  object btnUpdate: TButton
+    Left = 192
+    Top = 248
+    Width = 113
+    Height = 25
+    Caption = 'Update'
+    TabOrder = 6
+  end
+  object btnHapus: TButton
+    Left = 88
+    Top = 279
+    Width = 98
+    Height = 25
+    Caption = 'Delete'
+    TabOrder = 7
+  end
+  object btnClose: TButton
+    Left = 192
+    Top = 279
+    Width = 113
+    Height = 25
+    Caption = 'Exit'
+    TabOrder = 8
+  end
+end

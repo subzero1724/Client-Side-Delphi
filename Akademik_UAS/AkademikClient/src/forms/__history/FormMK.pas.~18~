@@ -1,0 +1,261 @@
+﻿unit FormMK;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids,
+  System.JSON,
+  ApiClient, SessionManager;
+
+type
+  TFrmMK = class(TForm)
+    Label1: TLabel;
+    sgMK: TStringGrid;
+    edtKode: TEdit;
+    edtNama: TEdit;
+    edtSKS: TEdit;
+    cbDosen: TComboBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    btnTambah: TButton;
+    btnUpdate: TButton;
+    btnHapus: TButton;
+    btnClose: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure btnCloseClick(Sender: TObject);
+    procedure btnTambahClick(Sender: TObject);
+    procedure sgMKSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure btnUpdateClick(Sender: TObject);
+  private
+    procedure InitGrid;
+    procedure LoadMK;
+    procedure LoadDosen;
+    function GenerateKodeMK: string;
+  public
+  end;
+
+var
+  FrmMK: TFrmMK;
+  SelectedID: Integer;
+
+implementation
+
+{$R *.dfm}
+
+function TFrmMK.GenerateKodeMK: string;
+var
+  Res      : TJSONObject;
+  LastKode : string;
+  Num      : Integer;
+begin
+  Res := TApiClient.Get('/admin/last_kode_mk.php');
+
+  if Res.GetValue('status').AsType<Boolean> then
+  begin
+    LastKode := Res
+      .GetValue<TJSONObject>('data')
+      .GetValue<string>('kode_mk');
+
+    // ambil angka belakang IF001 → 001
+    Num := StrToInt(Copy(LastKode, 3, 3)) + 1;
+  end
+  else
+    Num := 1;
+
+  Result := 'IF' + Format('%.3d', [Num]);
+end;
+
+procedure TFrmMK.btnCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmMK.btnTambahClick(Sender: TObject);
+var
+  Body : TJSONObject;
+begin
+  if edtNama.Text = '' then
+  begin
+    ShowMessage('Nama MK wajib diisi');
+    Exit;
+  end;
+
+  if cbDosen.ItemIndex = -1 then
+  begin
+    ShowMessage('Pilih dosen');
+    Exit;
+  end;
+
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('kode_mk', edtKode.Text);
+    Body.AddPair('nama_mk', edtNama.Text);
+    Body.AddPair('sks', TJSONNumber.Create(StrToInt(edtSKS.Text)));
+    Body.AddPair('id_dosen',
+      TJSONNumber.Create(Integer(cbDosen.Items.Objects[cbDosen.ItemIndex]))
+    );
+
+    TApiClient.Post('/admin/insert_mk.php', Body);
+
+    ShowMessage('Data MK berhasil ditambahkan');
+
+    LoadMK;
+    edtKode.Text := GenerateKodeMK;
+    edtNama.Clear;
+    edtSKS.Clear;
+    cbDosen.ItemIndex := -1;
+
+  finally
+    Body.Free;
+  end;
+end;
+
+procedure TFrmMK.btnUpdateClick(Sender: TObject);
+var
+  Body : TJSONObject;
+begin
+  if SelectedID = 0 then
+  begin
+    ShowMessage('Pilih data MK dulu');
+    Exit;
+  end;
+
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('id_matakuliah', TJSONNumber.Create(SelectedID));
+    Body.AddPair('nama_mk', edtNama.Text);
+    Body.AddPair('sks', TJSONNumber.Create(StrToInt(edtSKS.Text)));
+    Body.AddPair('id_dosen',
+      TJSONNumber.Create(Integer(cbDosen.Items.Objects[cbDosen.ItemIndex]))
+    );
+
+    TApiClient.Post('/admin/update_mk.php', Body);
+
+    ShowMessage('Data berhasil diupdate');
+    LoadMK;
+
+  finally
+    Body.Free;
+  end;
+end;
+
+
+procedure TFrmMK.FormShow(Sender: TObject);
+begin
+  if TSessionManager.GetRole <> 'admin' then
+  begin
+    ShowMessage('Akses ditolak');
+    Close;
+    Exit;
+  end;
+
+  InitGrid;
+  LoadDosen;
+  LoadMK;
+
+  edtKode.Text := GenerateKodeMK; // 👈 AUTO KODE
+  edtKode.Enabled := False;       // biar gak bisa diedit
+end;
+
+procedure TFrmMK.InitGrid;
+begin
+  sgMK.ColCount := 5;
+  sgMK.RowCount := 1;
+
+  sgMK.Cells[0,0] := 'ID';
+  sgMK.Cells[1,0] := 'Kode MK';
+  sgMK.Cells[2,0] := 'Nama MK';
+  sgMK.Cells[3,0] := 'SKS';
+  sgMK.Cells[4,0] := 'Dosen';
+end;
+
+procedure TFrmMK.LoadDosen;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  I: Integer;
+begin
+  cbDosen.Clear;
+
+  Res := TApiClient.Get('/admin/list_dosen.php');
+
+  if not Res.GetValue('status').AsType<Boolean> then
+  begin
+    ShowMessage(Res.GetValue<string>('message'));
+    Exit;
+  end;
+
+  Arr := Res.GetValue('data') as TJSONArray;
+
+  for I := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[I] as TJSONObject;
+
+    cbDosen.Items.AddObject(
+      Obj.GetValue<string>('nama_dosen'),
+      TObject(Obj.GetValue<Integer>('id_dosen'))
+    );
+  end;
+end;
+
+procedure TFrmMK.LoadMK;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  I: Integer;
+begin
+  Res := TApiClient.Get('/admin/list_mk.php');
+
+  if not Res.GetValue('status').AsType<Boolean> then
+  begin
+    ShowMessage(Res.GetValue<string>('message'));
+    Exit;
+  end;
+
+  Arr := Res.GetValue('data') as TJSONArray;
+
+  sgMK.RowCount := Arr.Count + 1;
+
+  for I := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[I] as TJSONObject;
+
+    sgMK.Cells[0,I+1] := Obj.GetValue<Integer>('id_matakuliah').ToString;
+    sgMK.Cells[1,I+1] := Obj.GetValue<string>('kode_mk');
+    sgMK.Cells[2,I+1] := Obj.GetValue<string>('nama_mk');
+    sgMK.Cells[3,I+1] := Obj.GetValue<Integer>('sks').ToString;
+    sgMK.Cells[4,I+1] := Obj.GetValue<string>('nama_dosen');
+  end;
+end;
+
+procedure TFrmMK.sgMKSelectCell(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+var
+  I: Integer;
+begin
+  if ARow = 0 then Exit;
+
+  SelectedID := StrToInt(sgMK.Cells[0, ARow]);
+
+  edtKode.Text := sgMK.Cells[1, ARow];
+  edtNama.Text := sgMK.Cells[2, ARow];
+  edtSKS.Text  := sgMK.Cells[3, ARow];
+
+  for I := 0 to cbDosen.Items.Count - 1 do
+    if cbDosen.Items[I] = sgMK.Cells[4, ARow] then
+    begin
+      cbDosen.ItemIndex := I;
+      Break;
+    end;
+end;
+
+end.
+

@@ -1,0 +1,138 @@
+unit FormMK;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids,
+  System.JSON,
+  ApiClient, SessionManager;
+
+type
+  TFrmMK = class(TForm)
+    Label1: TLabel;
+    sgMK: TStringGrid;
+    edtKode: TEdit;
+    edtNama: TEdit;
+    edtSKS: TEdit;
+    cbDosen: TComboBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    btnTambah: TButton;
+    btnUpdate: TButton;
+    btnHapus: TButton;
+    btnClose: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure btnCloseClick(Sender: TObject);
+  private
+    procedure InitGrid;
+    procedure LoadMK;
+    procedure LoadDosen;
+  public
+  end;
+
+var
+  FrmMK: TFrmMK;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmMK.btnCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmMK.FormShow(Sender: TObject);
+begin
+  if TSessionManager.GetRole <> 'admin' then
+  begin
+    ShowMessage('Akses ditolak');
+    Close;
+    Exit;
+  end;
+
+  InitGrid;
+  LoadDosen;
+  LoadMK;
+end;
+
+procedure TFrmMK.InitGrid;
+begin
+  sgMK.ColCount := 5;
+  sgMK.RowCount := 1;
+
+  sgMK.Cells[0,0] := 'ID';
+  sgMK.Cells[1,0] := 'Kode MK';
+  sgMK.Cells[2,0] := 'Nama MK';
+  sgMK.Cells[3,0] := 'SKS';
+  sgMK.Cells[4,0] := 'Dosen';
+end;
+
+procedure TFrmMK.LoadDosen;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  I: Integer;
+begin
+  cbDosen.Clear;
+
+  Res := TApiClient.Get('/admin/list_dosen.php');
+
+  if not Res.GetValue<Boolean>('status') then
+  begin
+    ShowMessage(Res.GetValue<string>('message'));
+    Exit;
+  end;
+
+  Arr := Res.GetValue('data') as TJSONArray;
+
+  for I := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[I] as TJSONObject;
+
+    cbDosen.Items.AddObject(
+      Obj.GetValue<string>('nama_dosen'),
+      TObject(Obj.GetValue<Integer>('id_dosen'))
+    );
+  end;
+end;
+
+procedure TFrmMK.LoadMK;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  I: Integer;
+begin
+  Res := TApiClient.Get('/admin/list_mk.php');
+
+  if not Res.GetValue('status').AsType<Boolean> then
+  begin
+    ShowMessage(Res.GetValue<string>('message'));
+    Exit;
+  end;
+
+  Arr := Res.GetValue('data') as TJSONArray;
+
+  sgMK.RowCount := Arr.Count + 1;
+
+  for I := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[I] as TJSONObject;
+
+    sgMK.Cells[0,I+1] := Obj.GetValue<Integer>('id_matakuliah').ToString;
+    sgMK.Cells[1,I+1] := Obj.GetValue<string>('kode_mk');
+    sgMK.Cells[2,I+1] := Obj.GetValue<string>('nama_mk');
+    sgMK.Cells[3,I+1] := Obj.GetValue<Integer>('sks').ToString;
+    sgMK.Cells[4,I+1] := Obj.GetValue<string>('nama_dosen');
+  end;
+end;
+
+end.
+

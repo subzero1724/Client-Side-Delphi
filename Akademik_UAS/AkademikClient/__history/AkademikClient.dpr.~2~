@@ -1,0 +1,28 @@
+program AkademikClient;
+
+uses
+  Vcl.Forms,
+  FormLogin in 'src\forms\FormLogin.pas' {FrmLogin},
+  FormAdmin in 'src\forms\FormAdmin.pas' {FrmAdmin},
+  FormMahasiswa in 'src\forms\FormMahasiswa.pas' {Form4},
+  FormDosen in 'src\forms\FormDosen.pas' {Form5},
+  ApiClient in 'src\utils\ApiClient.pas',
+  SessionManager in 'src\utils\SessionManager.pas',
+  AppConfig in 'src\utils\AppConfig.pas',
+  UserModel in 'src\models\UserModel.pas',
+  MataKuliahModel in 'src\models\MataKuliahModel.pas',
+  KRSModel in 'src\models\KRSModel.pas',
+  FormMK in 'src\forms\FormMK.pas' {FrmMK};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFrmLogin, FrmLogin);
+  Application.CreateForm(TFrmAdmin, FrmAdmin);
+  Application.CreateForm(TForm4, Form4);
+  Application.CreateForm(TForm5, Form5);
+  Application.CreateForm(TFrmMK, FrmMK);
+  Application.Run;
+end.

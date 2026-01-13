@@ -1,0 +1,77 @@
+object FrmLogin: TFrmLogin
+  Left = 0
+  Top = 0
+  Caption = 'Login Sistem Akademik'
+  ClientHeight = 390
+  ClientWidth = 396
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object lblUsername: TLabel
+    Left = 86
+    Top = 136
+    Width = 48
+    Height = 13
+    Caption = 'NIM/NIDN'
+  end
+  object lblPassword: TLabel
+    Left = 86
+    Top = 184
+    Width = 46
+    Height = 13
+    Caption = 'Password'
+  end
+  object Label1: TLabel
+    Left = 112
+    Top = 72
+    Width = 167
+    Height = 25
+    Caption = 'Login Akademik'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object edtUsername: TEdit
+    Left = 152
+    Top = 133
+    Width = 161
+    Height = 21
+    TabOrder = 0
+  end
+  object edtPassword: TEdit
+    Left = 152
+    Top = 181
+    Width = 161
+    Height = 21
+    PasswordChar = '*'
+    TabOrder = 1
+  end
+  object btnLogin: TButton
+    Left = 86
+    Top = 232
+    Width = 227
+    Height = 33
+    Caption = 'Login'
+    TabOrder = 2
+    OnClick = btnLoginClick
+  end
+  object btnExit: TButton
+    Left = 86
+    Top = 280
+    Width = 227
+    Height = 33
+    Caption = 'Exit'
+    TabOrder = 3
+    OnClick = btnExitClick
+  end
+end
