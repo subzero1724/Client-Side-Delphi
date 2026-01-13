@@ -1,0 +1,473 @@
+{
+	"info": {
+		"_postman_id": "fef17264-bd31-4344-a91b-6a596dde92cd",
+		"name": "Client-Side-Delphi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26904057"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Create Dosen",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjozLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwicmVmX2lkIjpudWxsLCJpYXQiOjE3NjgxNDA2Nzd9.n4X7CK9bI0_E9F6gw-Iu9Y6pR6Wuz-rSQGxYpc3f2dk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nidn\": \"D001\",\n  \"nama\": \"Dr. Budi Santoso\",\n  \"password\": \"dosen123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/dosen_create.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"dosen_create.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Mahasiswa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjozLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwicmVmX2lkIjpudWxsLCJpYXQiOjE3NjgxMzc2NjF9.eFtAqgDXWRcQuCg6Rf5RghQkZ2io1UvSKNLYgGJPv3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nidn\": \"D001\",\n  \"nama\": \"Dr. Budi Santoso\",\n  \"password\": \"dosen123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/dosen_create.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"dosen_create.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create MataKuliah",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjozLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwicmVmX2lkIjpudWxsLCJpYXQiOjE3NjgxNDM0MTZ9.Yg1_QFqRzMJ1x0KUVnfHgyUFAFhgn5FqvFBSoF8_aHM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kode_mk\": \"IF204\",\n  \"nama_mk\": \"Basis Data\",\n  \"sks\": 3,\n  \"id_dosen\": 2\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/matakuliah_create.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"matakuliah_create.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Dosen mengajar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjozLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwicmVmX2lkIjpudWxsLCJpYXQiOjE3NjgxNDA2Nzd9.n4X7CK9bI0_E9F6gw-Iu9Y6pR6Wuz-rSQGxYpc3f2dk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_dosen\": 1,\n  \"id_matakuliah\": 1\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/mengajar_create.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"mengajar_create.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dosen",
+			"item": [
+				{
+					"name": "View Mengajar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjo2LCJ1c2VybmFtZSI6IkQwMDIiLCJyb2xlIjoiZG9zZW4iLCJyZWZfaWQiOjIsImlhdCI6MTc2ODE0MTIwOX0.8-JyeZVNs1tNmjlkrGHCs2Ud7SvrmKO-2TD2imgpivs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_user\": 1,\n  \"role\": \"dosen\",\n  \"ref_id\": 1\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/dosen/mahasiswa_list.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dosen",
+								"mahasiswa_list.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Mahasiswa By MK",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjo2LCJ1c2VybmFtZSI6IkQwMDIiLCJyb2xlIjoiZG9zZW4iLCJyZWZfaWQiOjIsImlhdCI6MTc2ODE0MTIwOX0.8-JyeZVNs1tNmjlkrGHCs2Ud7SvrmKO-2TD2imgpivs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_user\": 1,\n  \"role\": \"dosen\",\n  \"ref_id\": 1\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/dosen/mahasiswa_list.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dosen",
+								"mahasiswa_list.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Input Nilai",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <TOKEN_DOSEN>",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_krs\": 3,\n  \"tugas\": 80,\n  \"kuis\": 85,\n  \"uts\": 78,\n  \"uas\": 90\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/dosen/input_nilai.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dosen",
+								"input_nilai.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mahasiswa",
+			"item": [
+				{
+					"name": "View List Mk",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjo1LCJ1c2VybmFtZSI6Ik0wMDEiLCJyb2xlIjoibWFoYXNpc3dhIiwicmVmX2lkIjoxLCJpYXQiOjE3NjgxNDQyNDZ9.GCh3XmHFLWU4f5qss82RLjlA-96Cpsyn5Dy6WIR5KTA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/mahasiswa/list_mk.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mahasiswa",
+								"list_mk.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create MK",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjo1LCJ1c2VybmFtZSI6Ik0wMDEiLCJyb2xlIjoibWFoYXNpc3dhIiwicmVmX2lkIjoxLCJpYXQiOjE3NjgxNDQyNDZ9.GCh3XmHFLWU4f5qss82RLjlA-96Cpsyn5Dy6WIR5KTA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_matakuliah\" : 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/mahasiswa/ambil_mk.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mahasiswa",
+								"ambil_mk.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Mk Diambil",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "KHS Mahasiswa",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <TOKEN_MAHASISWA>",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/mahasiswa/khs.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mahasiswa",
+								"khs.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();",
+							"",
+							"if (res.status === true && res.data.token) {",
+							"    pm.environment.set(\"token\", res.data.token);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"D002\",\n  \"password\": \"dosen123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/login.php",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"login.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();",
+							"",
+							"if (res.status === true) {",
+							"    pm.environment.unset(\"token\");",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/logout.php",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"logout.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

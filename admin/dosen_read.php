@@ -5,12 +5,11 @@ require_once "../utils/auth.php";
 
 roleGuard("admin");
 
-$sql = "SELECT id_mahasiswa, nim, nama, kelas, jurusan FROM mahasiswa ORDER BY nama ASC";
-$result = $conn->query($sql);
+$result = $conn->query("SELECT * FROM dosen ORDER BY nama ASC");
 
 $data = [];
 while ($row = $result->fetch_assoc()) {
     $data[] = $row;
 }
 
-response(true, "Data mahasiswa", $data);
+response(true, "Data dosen", $data);

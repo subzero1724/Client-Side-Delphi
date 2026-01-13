@@ -1,47 +1,75 @@
 <?php
-include "../config/database.php";
+require_once "../config/database.php";
+require_once "../utils/response.php";
+require_once "../utils/auth.php";
+require_once "../utils/nilai_helper.php";
+
+// 🔐 dosen only
+$user = roleGuard("dosen");
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$id_krs = $data['id_krs'];
-$tugas  = $data['tugas'];
-$kuis   = $data['kuis'];
-$uts    = $data['uts'];
-$uas    = $data['uas'];
+$id_krs = $data['id_krs'] ?? null;
+$tugas  = $data['tugas'] ?? null;
+$kuis   = $data['kuis'] ?? null;
+$uts    = $data['uts'] ?? null;
+$uas    = $data['uas'] ?? null;
 
-$nilai_akhir =
-    ($tugas * 0.1) +
-    ($kuis * 0.1) +
-    ($uts * 0.3) +
-    ($uas * 0.5);
-
-if ($nilai_akhir >= 85) {
-    $grade = 'A';
-} elseif ($nilai_akhir >= 75) {
-    $grade = 'B';
-} elseif ($nilai_akhir >= 65) {
-    $grade = 'C';
-} elseif ($nilai_akhir >= 50) {
-    $grade = 'D';
-} else {
-    $grade = 'E';
+if (!$id_krs || $tugas === null || $kuis === null || $uts === null || $uas === null) {
+    response(false, "Semua field nilai wajib diisi");
 }
 
-$sql = "
-INSERT INTO nilai (id_krs, tugas, kuis, uts, uas, nilai_akhir, grade)
-VALUES ($id_krs, $tugas, $kuis, $uts, $uas, $nilai_akhir, '$grade')
-";
+// hitung
+$nilai_akhir = hitungNilaiAkhir($tugas, $kuis, $uts, $uas);
+$grade = hitungGrade($nilai_akhir);
 
-if ($conn->query($sql)) {
-    echo json_encode([
-        "status" => true,
-        "message" => "Nilai berhasil disimpan",
-        "nilai_akhir" => $nilai_akhir,
-        "grade" => $grade
-    ]);
+// cek apakah nilai sudah ada
+$cek = $conn->prepare("SELECT id_nilai FROM nilai WHERE id_krs = ?");
+$cek->bind_param("i", $id_krs);
+$cek->execute();
+$res = $cek->get_result();
+
+if ($res->num_rows > 0) {
+    // update
+    $stmt = $conn->prepare("
+        UPDATE nilai 
+        SET tugas=?, kuis=?, uts=?, uas=?, nilai_akhir=?, grade=?
+        WHERE id_krs=?
+    ");
+    $stmt->bind_param(
+        "iiiidsi",
+        $tugas, $kuis, $uts, $uas, $nilai_akhir, $grade, $id_krs
+    );
+    $stmt->execute();
+
+    response(true, "Nilai berhasil diperbarui");
 } else {
-    echo json_encode([
-        "status" => false,
-        "message" => "Gagal menyimpan nilai"
-    ]);
+    // insert
+    $stmt = $conn->prepare("
+        INSERT INTO nilai (id_krs, tugas, kuis, uts, uas, nilai_akhir, grade)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "iiiiids",
+        $id_krs, $tugas, $kuis, $uts, $uas, $nilai_akhir, $grade
+    );
+    $stmt->execute();
+
+    response(true, "Nilai berhasil disimpan");
 }
+
+function hitungNilaiAkhir($tugas, $kuis, $uts, $uas) {
+    return ($tugas * 0.20)
+         + ($kuis * 0.20)
+         + ($uts   * 0.25)
+         + ($uas   * 0.35);
+}
+
+function hitungGrade($nilai) {
+    if ($nilai >= 85) return "A";
+    if ($nilai >= 75) return "B";
+    if ($nilai >= 65) return "C";
+    if ($nilai >= 50) return "D";
+    return "E";
+}
+
