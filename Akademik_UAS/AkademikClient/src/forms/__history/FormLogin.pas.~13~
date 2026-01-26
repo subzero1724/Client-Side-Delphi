@@ -1,0 +1,114 @@
+﻿unit FormLogin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls,
+  System.JSON,
+  FormAdmin, FormDosen, FormMahasiswa,
+  ApiClient, SessionManager, UserModel;
+
+type
+  TFrmLogin = class(TForm)
+    lblUsername: TLabel;
+    lblPassword: TLabel;
+    edtUsername: TEdit;
+    edtPassword: TEdit;
+    btnLogin: TButton;
+    btnExit: TButton;
+    Label1: TLabel;
+    procedure btnLoginClick(Sender: TObject);
+    procedure btnExitClick(Sender: TObject);
+  private
+    procedure DoLogin;
+  public
+    procedure LoadMataKuliah;
+  end;
+
+var
+  FrmLogin: TFrmLogin;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmLogin.btnExitClick(Sender: TObject);
+begin
+   Application.Terminate;
+end;
+
+procedure TFrmLogin.btnLoginClick(Sender: TObject);
+begin
+    DoLogin;
+end;
+
+procedure TFrmLogin.DoLogin;
+var
+  Body, Data: TJSONObject;
+  Response: TJSONObject;
+  User: TUser;
+begin
+  if (edtUsername.Text = '') or (edtPassword.Text = '') then
+  begin
+    ShowMessage('Username dan password wajib diisi');
+    Exit;
+  end;
+
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('username', edtUsername.Text);
+    Body.AddPair('password', edtPassword.Text);
+
+    Response := TApiClient.Post('/auth/login.php', Body);
+
+    if not Response.GetValue('status').AsType<Boolean> then
+    begin
+      ShowMessage(Response.GetValue('message').Value);
+      Exit;
+    end;
+
+    Data := Response.GetValue('data') as TJSONObject;
+    User := TUser.CreateFromJSON(Data);
+
+    // ✅ simpan session
+    TSessionManager.SetSession(
+      User.Token,
+      User.Role,
+      User.Username
+    );
+
+    // ✅ redirect sesuai role
+    if User.Role = 'admin' then
+    begin
+      FrmAdmin := TFrmAdmin.Create(Application);
+      FrmAdmin.Show;
+    end
+    else if User.Role = 'dosen' then
+    begin
+      FrmDosen := TFrmDosen.Create(Application);
+      FrmDosen.Show;
+    end
+    else if User.Role = 'mahasiswa' then
+    begin
+      FrmMahasiswa := TFrmMahasiswa.Create(Application);
+      FrmMahasiswa.Show;
+    end
+    else
+    begin
+      ShowMessage('Role tidak dikenali');
+      Exit;
+    end;
+
+    // ✅ sembunyikan login
+    Self.Hide;
+
+  finally
+    Body.Free;
+  end;
+end;
+
+
+end.

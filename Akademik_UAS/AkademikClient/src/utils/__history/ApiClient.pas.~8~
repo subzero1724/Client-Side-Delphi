@@ -1,0 +1,94 @@
+﻿unit ApiClient;
+
+interface
+
+uses
+  System.SysUtils, System.Classes,
+  System.JSON,
+  System.Net.URLClient,
+  System.Net.HttpClient,
+  System.Net.HttpClientComponent,
+  Vcl.Dialogs,
+  AppConfig, SessionManager;
+
+type
+  TApiClient = class
+  public
+    class function Get(Endpoint: string): TJSONObject;
+    class function Post(Endpoint: string; Body: TJSONObject): TJSONObject;
+  end;
+
+implementation
+
+class function TApiClient.Get(const Endpoint: string): TJSONObject;
+var
+  HTTP: TNetHTTPClient;
+  Resp: string;
+begin
+  Result := nil;
+  HTTP := TNetHTTPClient.Create(nil);
+  try
+    HTTP.ConnectionTimeout := 5000;
+    HTTP.ResponseTimeout   := 5000;
+
+    Resp := HTTP.Get(BASE_URL + Endpoint).ContentAsString;
+
+    if Resp = '' then
+      raise Exception.Create('Response kosong');
+
+    Result := TJSONObject.ParseJSONValue(Resp) as TJSONObject;
+
+  except
+    on E: Exception do
+      ShowMessage('API ERROR: ' + E.Message);
+  end;
+  HTTP.Free;
+end;
+
+class function TApiClient.Post(Endpoint: string; Body: TJSONObject): TJSONObject;
+var
+  Client   : TNetHTTPClient;
+  Response : IHTTPResponse;
+  Content  : TStringStream;
+  Url      : string;
+begin
+  Result := nil;
+  Client := TNetHTTPClient.Create(nil);
+  try
+    Url := BASE_URL + Endpoint;
+
+    Client.ContentType := 'application/json';
+
+    if TSessionManager.IsLoggedIn then
+      Client.CustomHeaders['Authorization'] :=
+        'Bearer ' + TSessionManager.GetToken;
+
+    Content := TStringStream.Create(Body.ToJSON, TEncoding.UTF8);
+
+    // 🔥 DEBUG
+    ShowMessage('POST REQUEST:' + sLineBreak + Url);
+
+    Response := Client.Post(Url, Content);
+
+    ShowMessage(
+      'HTTP STATUS: ' + Response.StatusCode.ToString + sLineBreak +
+      'RESPONSE:' + sLineBreak +
+      Response.ContentAsString
+    );
+
+    Result := TJSONObject.ParseJSONValue(
+      Response.ContentAsString
+    ) as TJSONObject;
+
+    Content.Free;
+
+  except
+    on E: Exception do
+      ShowMessage('HTTP ERROR: ' + E.Message);
+  end;
+
+  Client.Free;
+end;
+
+end.
+

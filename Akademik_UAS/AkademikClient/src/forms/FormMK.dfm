@@ -2,8 +2,8 @@ object FrmMK: TFrmMK
   Left = 0
   Top = 0
   Caption = 'Kelola Mata Kuliah'
-  ClientHeight = 341
-  ClientWidth = 635
+  ClientHeight = 376
+  ClientWidth = 855
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,7 +14,7 @@ object FrmMK: TFrmMK
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 280
+    Left = 344
     Top = 48
     Width = 126
     Height = 25
@@ -57,10 +57,16 @@ object FrmMK: TFrmMK
   object sgMK: TStringGrid
     Left = 355
     Top = 96
-    Width = 262
+    Width = 366
     Height = 209
     TabOrder = 0
     OnSelectCell = sgMKSelectCell
+    RowHeights = (
+      24
+      24
+      24
+      24
+      24)
   end
   object edtKode: TEdit
     Left = 192
@@ -118,12 +124,21 @@ object FrmMK: TFrmMK
     OnClick = btnHapusClick
   end
   object btnClose: TButton
+    Left = 88
+    Top = 310
+    Width = 217
+    Height = 35
+    Caption = 'Exit'
+    TabOrder = 8
+    OnClick = btnCloseClick
+  end
+  object btnRefresh: TButton
     Left = 192
     Top = 279
     Width = 113
     Height = 25
-    Caption = 'Exit'
-    TabOrder = 8
-    OnClick = btnCloseClick
+    Caption = 'Refresh'
+    TabOrder = 9
+    OnClick = btnRefreshClick
   end
 end

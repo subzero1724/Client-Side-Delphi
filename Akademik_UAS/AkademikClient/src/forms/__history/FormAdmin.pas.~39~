@@ -1,0 +1,169 @@
+﻿unit FormAdmin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids,
+  System.JSON, System.UITypes,
+  ApiClient, SessionManager, FormMK;
+
+const
+  WM_LOAD_MK = WM_APP + 1;
+
+type
+  TFrmAdmin = class(TForm)
+    Label1: TLabel;
+    btnDosen: TButton;
+    btnMahasiswa: TButton;
+    btnMK: TButton;
+    btnLogout: TButton;
+    sgData: TStringGrid;
+    btnRefresh: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnMKClick(Sender: TObject);
+    procedure btnLogoutClick(Sender: TObject);
+    procedure btnDosenClick(Sender: TObject);
+    procedure btnMahasiswaClick(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+  private
+    procedure InitGrid;
+  public
+    procedure LoadMataKuliah;
+  end;
+
+var
+  FrmAdmin: TFrmAdmin;
+
+
+
+
+implementation
+
+{$R *.dfm}
+
+{ ================= LOAD DATA ================= }
+
+procedure TFrmAdmin.LoadMataKuliah;
+var
+  Res : TJSONObject;
+  Arr : TJSONArray;
+  Obj : TJSONObject;
+  I   : Integer;
+begin
+  Res := TApiClient.Get('/admin/matakuliah_read.php');
+
+  if Res = nil then
+  begin
+    ShowMessage('API tidak merespon');
+    Exit;
+  end;
+
+  if not Res.GetValue('status').AsType<Boolean> then
+  begin
+    ShowMessage(Res.GetValue<string>('message'));
+    Exit;
+  end;
+
+  Arr := Res.GetValue<TJSONArray>('data');
+
+  // 🔥 reset ke header dulu
+  sgData.RowCount := 1 + sgData.FixedRows;
+
+  if (Arr = nil) or (Arr.Count = 0) then
+    Exit;
+
+  sgData.RowCount := Arr.Count + sgData.FixedRows;
+
+  for I := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[I] as TJSONObject;
+
+    sgData.Cells[0, I + sgData.FixedRows] := Obj.GetValue<string>('kode_mk');
+    sgData.Cells[1, I + sgData.FixedRows] := Obj.GetValue<string>('nama_mk');
+    sgData.Cells[2, I + sgData.FixedRows] := Obj.GetValue<string>('sks');
+    sgData.Cells[3, I + sgData.FixedRows] := Obj.GetValue<string>('nama_dosen');
+  end;
+end;
+
+{ ================= FORM CREATE ================= }
+
+procedure TFrmAdmin.FormCreate(Sender: TObject);
+begin
+  InitGrid;
+end;
+
+{ ================= FORM SHOW ================= }
+procedure TFrmAdmin.FormShow(Sender: TObject);
+begin
+  if TSessionManager.GetRole <> 'admin' then
+  begin
+    ShowMessage('Akses ditolak');
+    Close;
+    Exit;
+  end;
+
+  Label1.Caption := 'ADMIN PANEL';
+end;
+
+
+{ ================= GRID ================= }
+
+procedure TFrmAdmin.InitGrid;
+begin
+  sgData.ColCount := 4;
+
+  sgData.FixedRows := 1;   // header
+  sgData.FixedCols := 0;
+
+  sgData.RowCount := 2;    // 🔥 minimal 2 (header + 1 data)
+
+  sgData.Cells[0,0] := 'Kode MK';
+  sgData.Cells[1,0] := 'Nama MK';
+  sgData.Cells[2,0] := 'SKS';
+  sgData.Cells[3,0] := 'Dosen';
+end;
+
+{ ================= BUTTON ================= }
+
+procedure TFrmAdmin.btnMKClick(Sender: TObject);
+begin
+  FrmMK := TFrmMK.Create(Self);
+  try
+    FrmMK.ShowModal;
+    LoadMataKuliah; // refresh
+  finally
+    FrmMK.Free;
+  end;
+end;
+
+procedure TFrmAdmin.btnRefreshClick(Sender: TObject);
+begin
+  LoadMataKuliah;
+end;
+
+procedure TFrmAdmin.btnLogoutClick(Sender: TObject);
+begin
+  if MessageDlg('Logout?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    TSessionManager.ClearSession;
+    Close;
+    Application.MainForm.Show;
+  end;
+end;
+
+procedure TFrmAdmin.btnDosenClick(Sender: TObject);
+begin
+  ShowMessage('Menu Dosen belum dibuat');
+end;
+
+procedure TFrmAdmin.btnMahasiswaClick(Sender: TObject);
+begin
+  ShowMessage('Menu Mahasiswa belum dibuat');
+end;
+
+end.
+

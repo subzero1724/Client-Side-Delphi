@@ -1,0 +1,200 @@
+unit FormDosen;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  System.JSON,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids,
+  DosenModel; // <- PENTING
+
+type
+  TFrmDosen = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    edtNIDN: TEdit;
+    edtNama: TEdit;
+    sgDosen: TStringGrid;
+    btnTambah: TButton;
+    btnUpdate: TButton;
+    btnDelete: TButton;
+    btnClear: TButton;
+    edtPassword: TEdit;
+    Label4: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure btnTambahClick(Sender: TObject);
+    procedure btnUpdateClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure btnClearClick(Sender: TObject);
+    procedure sgDosenSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+  private
+    procedure SetupGrid;
+    procedure LoadDosen;
+    procedure ClearForm;
+    function GenerateKodeDosen: string;
+  public
+  end;
+
+var
+  FrmDosen: TFrmDosen;
+
+implementation
+
+{$R *.dfm}
+
+{ ================= GRID ================= }
+
+procedure TFrmDosen.SetupGrid;
+begin
+  sgDosen.ColCount := 3;
+  sgDosen.RowCount := 1;
+  sgDosen.FixedRows := 1;
+
+  sgDosen.Cells[0,0] := 'ID';
+  sgDosen.Cells[1,0] := 'NIDN';
+  sgDosen.Cells[2,0] := 'Nama';
+
+  sgDosen.ColWidths[0] := 0;   // hide ID
+  sgDosen.ColWidths[1] := 120;
+  sgDosen.ColWidths[2] := 250;
+end;
+
+procedure TFrmDosen.LoadDosen;
+var
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  I: Integer;
+begin
+  sgDosen.RowCount := 1;
+
+  Arr := TDosenModel.GetAll;
+  try
+    for I := 0 to Arr.Count - 1 do
+    begin
+      Obj := Arr.Items[I] as TJSONObject;
+      sgDosen.RowCount := sgDosen.RowCount + 1;
+
+      sgDosen.Cells[0, I+1] := Obj.GetValue('id_dosen').Value;
+      sgDosen.Cells[1, I+1] := Obj.GetValue('nidn').Value;
+      sgDosen.Cells[2, I+1] := Obj.GetValue('nama').Value;
+    end;
+  finally
+    Arr.Free;
+  end;
+end;
+
+{ ================= AUTO KODE ================= }
+
+function TFrmDosen.GenerateKodeDosen: string;
+var
+  LastKode: string;
+  LastNumber: Integer;
+begin
+  if sgDosen.RowCount <= 1 then
+    Exit('DS001');
+
+  LastKode := sgDosen.Cells[1, sgDosen.RowCount - 1];
+
+  if Copy(LastKode, 1, 2) <> 'DS' then
+    Exit('DS001');
+
+  LastNumber := StrToIntDef(Copy(LastKode, 3, 3), 0) + 1;
+  Result := 'DS' + Format('%.3d', [LastNumber]);
+end;
+
+{ ================= FORM ================= }
+
+procedure TFrmDosen.FormShow(Sender: TObject);
+begin
+  SetupGrid;
+  LoadDosen;
+  ClearForm;
+end;
+
+procedure TFrmDosen.ClearForm;
+begin
+  edtNIDN.Clear;
+  edtNama.Clear;
+  edtNIDN.Enabled := True;
+end;
+
+{ ================= CRUD ================= }
+
+procedure TFrmDosen.btnTambahClick(Sender: TObject);
+begin
+  if edtNama.Text = '' then
+  begin
+    ShowMessage('Nama wajib diisi');
+    Exit;
+  end;
+
+  if edtPassword.Text = '' then
+  begin
+    ShowMessage('Password wajib diisi');
+    Exit;
+  end;
+
+  edtNIDN.Text := GenerateKodeDosen;
+
+  if TDosenModel.Insert(
+       edtNIDN.Text,
+       edtNama.Text,
+       edtPassword.Text
+     ) then
+  begin
+    ShowMessage('Dosen & akun berhasil dibuat');
+    LoadDosen;
+    ClearForm;
+  end;
+end;
+
+
+procedure TFrmDosen.btnUpdateClick(Sender: TObject);
+begin
+  if edtNIDN.Text = '' then Exit;
+
+  if TDosenModel.Update(edtNIDN.Text, edtNama.Text) then
+  begin
+    ShowMessage('Data dosen berhasil diupdate');
+    LoadDosen;
+    ClearForm;
+  end;
+end;
+
+procedure TFrmDosen.btnDeleteClick(Sender: TObject);
+begin
+  if edtNIDN.Text = '' then Exit;
+
+  if MessageDlg('Hapus dosen ini?', mtConfirmation,
+    [mbYes, mbNo], 0) = mrYes then
+  begin
+    if TDosenModel.Delete(edtNIDN.Text) then
+    begin
+      ShowMessage('Data dosen berhasil dihapus');
+      LoadDosen;
+      ClearForm;
+    end;
+  end;
+end;
+
+procedure TFrmDosen.btnClearClick(Sender: TObject);
+begin
+  ClearForm;
+end;
+
+procedure TFrmDosen.sgDosenSelectCell(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+begin
+  if ARow = 0 then Exit;
+
+  edtNIDN.Text := sgDosen.Cells[1, ARow];
+  edtNama.Text := sgDosen.Cells[2, ARow];
+  edtNIDN.Enabled := False;
+end;
+
+end.
+

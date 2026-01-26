@@ -7,10 +7,18 @@ roleGuard("admin");
 
 $data = json_decode(file_get_contents("php://input"), true);
 
+if (!isset($data['nidn'], $data['nama'])) {
+    response(false, "Data tidak lengkap");
+}
+
 $stmt = $conn->prepare(
-    "UPDATE dosen SET nama=?, nidn=? WHERE id_dosen=?"
+    "UPDATE dosen SET nama=? WHERE nidn=?"
 );
-$stmt->bind_param("ssi", $data['nama'], $data['nidn'], $data['id_dosen']);
+$stmt->bind_param("ss", $data['nama'], $data['nidn']);
 $stmt->execute();
 
-response(true, "Dosen berhasil diupdate");
+if ($stmt->affected_rows > 0) {
+    response(true, "Dosen berhasil diupdate");
+} else {
+    response(false, "Data tidak berubah / NIDN tidak ditemukan");
+}

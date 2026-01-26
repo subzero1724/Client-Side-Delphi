@@ -1,0 +1,90 @@
+unit ApiClient;
+
+interface
+
+uses
+  System.SysUtils, System.Classes,
+  System.JSON,
+  System.Net.URLClient,
+  System.Net.HttpClient,
+  System.Net.HttpClientComponent,
+  AppConfig, SessionManager;
+
+type
+  TApiClient = class
+  public
+    class function Post(
+      Endpoint: string;
+      Body: TJSONObject
+    ): TJSONObject;
+
+    class function Get(
+      Endpoint: string
+    ): TJSONObject;
+  end;
+
+implementation
+
+class function TApiClient.Post(
+  Endpoint: string;
+  Body: TJSONObject
+): TJSONObject;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+  Content: TStringStream;
+begin
+  Client := TNetHTTPClient.Create(nil);
+  try
+    Client.ContentType := 'application/json';
+
+    if TSessionManager.IsLoggedIn then
+      Client.CustomHeaders['Authorization'] :=
+        'Bearer ' + TSessionManager.GetToken;
+
+    Content := TStringStream.Create(
+      Body.ToJSON, TEncoding.UTF8
+    );
+
+    Response := Client.Post(
+      BASE_URL + Endpoint,
+      Content
+    );
+
+    Result := TJSONObject.ParseJSONValue(
+      Response.ContentAsString
+    ) as TJSONObject;
+
+  finally
+    Client.Free;
+  end;
+end;
+
+class function TApiClient.Get(
+  Endpoint: string
+): TJSONObject;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+begin
+  Client := TNetHTTPClient.Create(nil);
+  try
+    if TSessionManager.IsLoggedIn then
+      Client.CustomHeaders['Authorization'] :=
+        'Bearer ' + TSessionManager.GetToken;
+
+    Response := Client.Get(
+      BASE_URL + Endpoint
+    );
+
+    Result := TJSONObject.ParseJSONValue(
+      Response.ContentAsString
+    ) as TJSONObject;
+
+  finally
+    Client.Free;
+  end;
+
+end;
+
+end.

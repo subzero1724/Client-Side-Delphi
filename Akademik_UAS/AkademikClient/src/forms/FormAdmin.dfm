@@ -3,7 +3,7 @@ object FrmAdmin: TFrmAdmin
   Top = 0
   Caption = 'Admin Panel'
   ClientHeight = 456
-  ClientWidth = 543
+  ClientWidth = 592
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -66,13 +66,20 @@ object FrmAdmin: TFrmAdmin
   object sgData: TStringGrid
     Left = 0
     Top = 246
-    Width = 543
+    Width = 592
     Height = 210
     Align = alBottom
     FixedCols = 0
     TabOrder = 4
-    ExplicitLeft = 120
-    ExplicitTop = 215
-    ExplicitWidth = 361
+    OnClick = sgDataClick
+  end
+  object btnRefresh: TButton
+    Left = 488
+    Top = 197
+    Width = 96
+    Height = 43
+    Caption = #55357#56580' Refresh Data'
+    TabOrder = 5
+    OnClick = btnRefreshClick
   end
 end

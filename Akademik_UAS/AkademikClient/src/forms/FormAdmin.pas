@@ -1,4 +1,4 @@
-unit FormAdmin;
+﻿unit FormAdmin;
 
 interface
 
@@ -7,9 +7,8 @@ uses
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.Grids,
-  System.JSON,
-  ApiClient, SessionManager,
-  FormMK;
+  System.JSON, System.UITypes,
+  ApiClient, SessionManager, FormMK, FormMahasiswaAdmin;
 
 type
   TFrmAdmin = class(TForm)
@@ -18,16 +17,20 @@ type
     btnMahasiswa: TButton;
     btnMK: TButton;
     btnLogout: TButton;
+    btnRefresh: TButton;
     sgData: TStringGrid;
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnMKClick(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+    procedure btnLogoutClick(Sender: TObject);
     procedure btnDosenClick(Sender: TObject);
     procedure btnMahasiswaClick(Sender: TObject);
-    procedure btnMKClick(Sender: TObject);
-    procedure btnLogoutClick(Sender: TObject);
+    procedure sgDataClick(Sender: TObject);
   private
-    procedure InitGrid;
-    procedure LoadMataKuliah;
+    procedure SetupHeader;
   public
+    procedure LoadMataKuliah;
   end;
 
 var
@@ -37,9 +40,26 @@ implementation
 
 {$R *.dfm}
 
+uses FormDosenAdmin;
+
+{ ================= FORM CREATE ================= }
+
+procedure TFrmAdmin.FormCreate(Sender: TObject);
+begin
+  sgData.ColCount := 4;
+  sgData.FixedRows := 1;
+  sgData.FixedCols := 0;
+
+  sgData.Options := sgData.Options + [goFixedVertLine, goFixedHorzLine];
+
+  sgData.RowCount := 1;
+  SetupHeader;
+end;
+
+{ ================= FORM SHOW ================= }
+
 procedure TFrmAdmin.FormShow(Sender: TObject);
 begin
-  // role guard UI
   if TSessionManager.GetRole <> 'admin' then
   begin
     ShowMessage('Akses ditolak');
@@ -48,53 +68,71 @@ begin
   end;
 
   Label1.Caption := 'ADMIN PANEL';
-  InitGrid;
 end;
 
-procedure TFrmAdmin.InitGrid;
-begin
-  sgData.ColCount := 4;
-  sgData.RowCount := 1;
+{ ================= HEADER ================= }
 
+procedure TFrmAdmin.SetupHeader;
+begin
   sgData.Cells[0,0] := 'Kode MK';
   sgData.Cells[1,0] := 'Nama MK';
   sgData.Cells[2,0] := 'SKS';
   sgData.Cells[3,0] := 'Dosen';
 end;
 
+procedure TFrmAdmin.sgDataClick(Sender: TObject);
+begin
+
+end;
+
+{ ================= LOAD DATA ================= }
+
 procedure TFrmAdmin.LoadMataKuliah;
 var
-  Res: TJSONObject;
-  Arr: TJSONArray;
-  I: Integer;
+  Res : TJSONObject;
+  Arr : TJSONArray;
+  Obj : TJSONObject;
+  I   : Integer;
 begin
-  Res := TApiClient.Get('/admin/list_mk.php');
+  Res := TApiClient.Get('/admin/matakuliah_read.php');
 
-  if not Res.GetValue('status').AsType<Boolean> then
+  if (Res = nil) or
+     (not Res.GetValue('status').AsType<Boolean>) then
   begin
-    ShowMessage(Res.GetValue<string>('message'));
+    ShowMessage('Gagal load data');
     Exit;
   end;
 
   Arr := Res.GetValue<TJSONArray>('data');
+  if Arr = nil then Exit;
 
-  sgData.RowCount := Arr.Count + 1;
+  sgData.RowCount := Arr.Count + 1; // header + data
+  SetupHeader;                      // 🔥 WAJIB SETELAH RowCount
 
   for I := 0 to Arr.Count - 1 do
   begin
-    sgData.Cells[0, I+1] := Arr.Items[I].GetValue<string>('kode_mk');
-    sgData.Cells[1, I+1] := Arr.Items[I].GetValue<string>('nama_mk');
-    sgData.Cells[2, I+1] := Arr.Items[I].GetValue<string>('sks');
-    sgData.Cells[3, I+1] := Arr.Items[I].GetValue<string>('nama_dosen');
+    Obj := Arr.Items[I] as TJSONObject;
+
+    sgData.Cells[0, I+1] := Obj.GetValue<string>('kode_mk');
+    sgData.Cells[1, I+1] := Obj.GetValue<string>('nama_mk');
+    sgData.Cells[2, I+1] := Obj.GetValue<string>('sks');
+    sgData.Cells[3, I+1] := Obj.GetValue<string>('nama_dosen');
   end;
 end;
 
+{ ================= BUTTON ================= }
+
+procedure TFrmAdmin.btnRefreshClick(Sender: TObject);
+begin
+  LoadMataKuliah;
+end;
 
 procedure TFrmAdmin.btnMKClick(Sender: TObject);
 begin
   FrmMK := TFrmMK.Create(Self);
   try
-    FrmMK.ShowModal;  // popup (blocking)
+    FrmMK.ShowModal;
+    LoadMataKuliah;
   finally
     FrmMK.Free;
   end;
@@ -112,12 +150,24 @@ end;
 
 procedure TFrmAdmin.btnDosenClick(Sender: TObject);
 begin
-  ShowMessage('Menu Dosen belum dibuat');
+  FrmDosenAdmin := TFrmDosenAdmin.Create(Self);
+  try
+    FrmDosenAdmin.ShowModal;
+  finally
+    FrmDosenAdmin.Free;
+  end;
+
 end;
 
 procedure TFrmAdmin.btnMahasiswaClick(Sender: TObject);
 begin
-  ShowMessage('Menu Mahasiswa belum dibuat');
+  FrmMahasiswaAdmin := TFrmMahasiswaAdmin.Create(Self);
+  try
+    FrmMahasiswaAdmin.ShowModal;
+  finally
+    FrmMahasiswaAdmin.Free;
+
+  end;
 end;
 
 end.

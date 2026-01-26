@@ -106,12 +106,12 @@
             <Form>FrmAdmin</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="src\forms\FormMahasiswa.pas">
-            <Form>FrmMahasiswa</Form>
+        <DCCReference Include="src\forms\FormMahasiswaAdmin.pas">
+            <Form>FrmMahasiswaAdmin</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="src\forms\FormDosen.pas">
-            <Form>FrmDosen</Form>
+        <DCCReference Include="src\forms\FormDosenAdmin.pas">
+            <Form>FrmDosenAdmin</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\FormMK.pas">
@@ -124,6 +124,11 @@
         <DCCReference Include="src\models\UserModel.pas"/>
         <DCCReference Include="src\models\MataKuliahModel.pas"/>
         <DCCReference Include="src\models\KRSModel.pas"/>
+        <DCCReference Include="src\models\DosenModel.pas"/>
+        <DCCReference Include="src\forms\Mahasiswa\DaftarKrs.pas">
+            <Form>FormDaftarKrs</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="AkademikClient.dpr"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

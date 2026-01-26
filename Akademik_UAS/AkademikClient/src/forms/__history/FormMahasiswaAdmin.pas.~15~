@@ -1,0 +1,236 @@
+﻿unit FormMahasiswaAdmin;
+
+interface
+
+uses
+  Winapi.Windows, System.SysUtils, System.Classes,
+  System.JSON,
+  Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids,
+  ApiClient, SessionManager, Vcl.Controls;
+
+type
+  TFrmMahasiswaAdmin = class(TForm)
+    sgMahasiswa: TStringGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    edtNIM: TEdit;
+    edtNama: TEdit;
+    edtJurusan: TEdit;
+    edtPassword: TEdit;
+    cbKelas: TComboBox;
+    btnTambah: TButton;
+    btnUpdate: TButton;
+    btnDelete: TButton;
+    btnRefresh: TButton;
+    btnExit: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure btnTambahClick(Sender: TObject);
+    procedure btnUpdateClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+    procedure btnExitClick(Sender: TObject);
+    procedure sgMahasiswaSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+  private
+    SelectedID: Integer;
+    procedure InitGrid;
+    procedure LoadMahasiswa;
+    procedure ClearForm;
+  end;
+
+var
+  FrmMahasiswaAdmin: TFrmMahasiswaAdmin;
+
+implementation
+
+{$R *.dfm}
+
+{ ================= INIT GRID ================= }
+
+procedure TFrmMahasiswaAdmin.InitGrid;
+begin
+  sgMahasiswa.ColCount := 5;
+
+  sgMahasiswa.FixedRows := 1;
+  sgMahasiswa.FixedCols := 0;
+
+  sgMahasiswa.Options := sgMahasiswa.Options +
+    [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine];
+
+  // HEADER
+  sgMahasiswa.Cells[0,0] := 'ID';
+  sgMahasiswa.Cells[1,0] := 'NIM';
+  sgMahasiswa.Cells[2,0] := 'Nama';
+  sgMahasiswa.Cells[3,0] := 'Kelas';
+  sgMahasiswa.Cells[4,0] := 'Jurusan';
+
+  sgMahasiswa.ColWidths[0] := 0;
+  sgMahasiswa.ColWidths[1] := 120;
+  sgMahasiswa.ColWidths[2] := 180;
+  sgMahasiswa.ColWidths[3] := 80;
+  sgMahasiswa.ColWidths[4] := 140;
+end;
+
+{ ================= LOAD DATA ================= }
+
+procedure TFrmMahasiswaAdmin.LoadMahasiswa;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  I: Integer;
+begin
+  Res := TApiClient.Get('/admin/mahasiswa_read.php');
+
+  if (Res = nil) or
+     (not Res.GetValue('status').AsType<Boolean>) then
+  begin
+    ShowMessage('Gagal load mahasiswa');
+    Exit;
+  end;
+
+  Arr := Res.GetValue<TJSONArray>('data');
+  if Arr = nil then Exit;
+
+  sgMahasiswa.RowCount := Arr.Count + 1;
+  InitGrid; // 🔥 HEADER DIULANG SETELAH RowCount
+
+  for I := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[I] as TJSONObject;
+
+    sgMahasiswa.Cells[0, I+1] := Obj.GetValue<string>('id_mahasiswa');
+    sgMahasiswa.Cells[1, I+1] := Obj.GetValue<string>('nim');
+    sgMahasiswa.Cells[2, I+1] := Obj.GetValue<string>('nama');
+    sgMahasiswa.Cells[3, I+1] := Obj.GetValue<string>('kelas');
+    sgMahasiswa.Cells[4, I+1] := Obj.GetValue<string>('jurusan');
+  end;
+end;
+
+{ ================= FORM ================= }
+
+procedure TFrmMahasiswaAdmin.FormShow(Sender: TObject);
+begin
+  if TSessionManager.GetRole <> 'admin' then
+  begin
+    Close;
+    Exit;
+  end;
+
+  InitGrid;        // 🔥 PASTI ADA
+  LoadMahasiswa;   // 🔥 PASTI ADA
+  ClearForm;
+end;
+
+procedure TFrmMahasiswaAdmin.ClearForm;
+begin
+  edtNIM.Clear;
+  edtNama.Clear;
+  edtJurusan.Clear;
+  edtPassword.Clear;
+  cbKelas.ItemIndex := -1;
+  SelectedID := 0;
+end;
+
+{ ================= CRUD ================= }
+
+procedure TFrmMahasiswaAdmin.btnTambahClick(Sender: TObject);
+var
+  Body: TJSONObject;
+begin
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('nim', edtNIM.Text);
+    Body.AddPair('nama', edtNama.Text);
+    Body.AddPair('kelas', cbKelas.Text);
+    Body.AddPair('jurusan', edtJurusan.Text);
+    Body.AddPair('password', edtPassword.Text);
+
+    TApiClient.Post('/admin/mahasiswa_create.php', Body);
+
+    LoadMahasiswa;
+    ClearForm;
+  finally
+    Body.Free;
+  end;
+end;
+
+procedure TFrmMahasiswaAdmin.btnUpdateClick(Sender: TObject);
+var
+  Body: TJSONObject;
+begin
+  if SelectedID = 0 then
+  begin
+    ShowMessage('Pilih data mahasiswa dulu');
+    Exit;
+  end;
+
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('id_mahasiswa', TJSONNumber.Create(SelectedID));
+    Body.AddPair('nama', edtNama.Text);
+    Body.AddPair('kelas', cbKelas.Text);
+    Body.AddPair('jurusan', edtJurusan.Text);
+
+    TApiClient.Post('/admin/mahasiswa_update.php', Body);
+
+    ShowMessage('Update berhasil');
+    LoadMahasiswa;
+    ClearForm;
+  finally
+    Body.Free;
+  end;
+end;
+
+procedure TFrmMahasiswaAdmin.btnDeleteClick(Sender: TObject);
+begin
+  if SelectedID = 0 then
+  begin
+    ShowMessage('Pilih data mahasiswa dulu');
+    Exit;
+  end;
+
+  if MessageDlg('Hapus mahasiswa ini?', mtConfirmation,
+    [mbYes, mbNo], 0) = mrYes then
+  begin
+    TApiClient.Get(
+      '/admin/mahasiswa_delete.php?id_mahasiswa=' + SelectedID.ToString
+    );
+
+    ShowMessage('Data dihapus');
+    LoadMahasiswa;
+    ClearForm;
+  end;
+end;
+
+procedure TFrmMahasiswaAdmin.btnRefreshClick(Sender: TObject);
+begin
+  LoadMahasiswa;
+end;
+
+procedure TFrmMahasiswaAdmin.btnExitClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmMahasiswaAdmin.sgMahasiswaSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  if ARow = 0 then Exit; // jangan header
+
+  // 🔥 AMBIL ID DARI KOLOM 0
+  SelectedID := StrToIntDef(sgMahasiswa.Cells[0, ARow], 0);
+
+  // isi form
+  edtNIM.Text  := sgMahasiswa.Cells[1, ARow];
+  edtNama.Text := sgMahasiswa.Cells[2, ARow];
+  cbKelas.Text := sgMahasiswa.Cells[3, ARow];
+  edtJurusan.Text := sgMahasiswa.Cells[4, ARow];
+end;
+
+end.
+

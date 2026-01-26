@@ -1,0 +1,85 @@
+object FrmAdmin: TFrmAdmin
+  Left = 0
+  Top = 0
+  Caption = 'Admin Panel'
+  ClientHeight = 456
+  ClientWidth = 592
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 232
+    Top = 96
+    Width = 130
+    Height = 25
+    Caption = 'Admin Panel'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object btnDosen: TButton
+    Left = 112
+    Top = 147
+    Width = 97
+    Height = 30
+    Caption = 'Dosen'
+    TabOrder = 0
+    OnClick = btnDosenClick
+  end
+  object btnMahasiswa: TButton
+    Left = 248
+    Top = 147
+    Width = 97
+    Height = 30
+    Caption = 'Mahasiswa'
+    TabOrder = 1
+    OnClick = btnMahasiswaClick
+  end
+  object btnMK: TButton
+    Left = 384
+    Top = 147
+    Width = 89
+    Height = 30
+    Caption = 'Mata Kuliah'
+    TabOrder = 2
+    OnClick = btnMKClick
+  end
+  object btnLogout: TButton
+    Left = 112
+    Top = 200
+    Width = 361
+    Height = 33
+    Caption = 'LogOut'
+    TabOrder = 3
+    OnClick = btnLogoutClick
+  end
+  object sgData: TStringGrid
+    Left = 0
+    Top = 246
+    Width = 592
+    Height = 210
+    Align = alBottom
+    FixedCols = 0
+    TabOrder = 4
+    ExplicitLeft = -8
+  end
+  object btnRefresh: TButton
+    Left = 488
+    Top = 197
+    Width = 96
+    Height = 43
+    Caption = #55357#56580' Refresh Data'
+    TabOrder = 5
+    OnClick = btnRefreshClick
+  end
+end

@@ -1,0 +1,34 @@
+unit FormDosen;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids;
+
+type
+  TFrmDosen = class(TForm)
+    Label1: TLabel;
+    edtNIDN: TEdit;
+    edtNama: TEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    sgDosen: TStringGrid;
+    btnTambah: TButton;
+    btnUpdate: TButton;
+    btnDelete: TButton;
+    btnClear: TButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDosen: TFrmDosen;
+
+implementation
+
+{$R *.dfm}
+
+end.

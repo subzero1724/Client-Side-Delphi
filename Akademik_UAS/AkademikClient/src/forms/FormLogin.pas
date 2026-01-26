@@ -8,7 +8,7 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls,
   System.JSON,
-  FormAdmin, FormDosen, FormMahasiswa,
+  FormAdmin, FormDosenAdmin, FormMahasiswaAdmin,
   ApiClient, SessionManager, UserModel;
 
 type
@@ -24,8 +24,6 @@ type
     procedure btnExitClick(Sender: TObject);
   private
     procedure DoLogin;
-  public
-    { Public declarations }
   end;
 
 var
@@ -37,12 +35,12 @@ implementation
 
 procedure TFrmLogin.btnExitClick(Sender: TObject);
 begin
-   Application.Terminate;
+  Application.Terminate;
 end;
 
 procedure TFrmLogin.btnLoginClick(Sender: TObject);
 begin
-    DoLogin;
+  DoLogin;
 end;
 
 procedure TFrmLogin.DoLogin;
@@ -64,7 +62,8 @@ begin
 
     Response := TApiClient.Post('/auth/login.php', Body);
 
-    if not Response.GetValue('status').AsType<Boolean> then
+    if (Response = nil) or
+       (not Response.GetValue('status').AsType<Boolean>) then
     begin
       ShowMessage(Response.GetValue('message').Value);
       Exit;
@@ -73,14 +72,14 @@ begin
     Data := Response.GetValue('data') as TJSONObject;
     User := TUser.CreateFromJSON(Data);
 
-    // ✅ simpan session
+    // ✅ SIMPAN SESSION
     TSessionManager.SetSession(
       User.Token,
       User.Role,
       User.Username
     );
 
-    // ✅ redirect sesuai role
+    // ✅ REDIRECT SESUAI ROLE
     if User.Role = 'admin' then
     begin
       FrmAdmin := TFrmAdmin.Create(Application);
@@ -88,13 +87,13 @@ begin
     end
     else if User.Role = 'dosen' then
     begin
-      FrmDosen := TFrmDosen.Create(Application);
-      FrmDosen.Show;
+//      FrmDosenAdmin := TFrmDosenAdmin.Create(Application);
+//      FrmDosenAdmin.Show;
     end
     else if User.Role = 'mahasiswa' then
     begin
-      FrmMahasiswa := TFrmMahasiswa.Create(Application);
-      FrmMahasiswa.Show;
+//      FrmMahasiswa := TFrmMahasiswa.Create(Application);
+//      FrmMahasiswa.Show;
     end
     else
     begin
@@ -102,7 +101,7 @@ begin
       Exit;
     end;
 
-    // ✅ sembunyikan login
+    // ✅ TUTUP LOGIN
     Self.Hide;
 
   finally
@@ -110,5 +109,5 @@ begin
   end;
 end;
 
-
 end.
+

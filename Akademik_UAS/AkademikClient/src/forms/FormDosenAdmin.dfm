@@ -1,0 +1,133 @@
+object FrmDosenAdmin: TFrmDosenAdmin
+  Left = 0
+  Top = 0
+  Caption = 'FrmDosenAdmin'
+  ClientHeight = 340
+  ClientWidth = 565
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 206
+    Top = 56
+    Width = 199
+    Height = 25
+    Caption = 'Form Daftar Dosen'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 88
+    Top = 115
+    Width = 25
+    Height = 13
+    Caption = 'NIDN'
+  end
+  object Label3: TLabel
+    Left = 88
+    Top = 155
+    Width = 60
+    Height = 13
+    Caption = 'Nama Dosen'
+  end
+  object Label4: TLabel
+    Left = 88
+    Top = 195
+    Width = 46
+    Height = 13
+    Caption = 'Password'
+  end
+  object edtNIDN: TEdit
+    Left = 160
+    Top = 112
+    Width = 121
+    Height = 21
+    TabOrder = 0
+  end
+  object edtNama: TEdit
+    Left = 160
+    Top = 152
+    Width = 121
+    Height = 21
+    TabOrder = 1
+  end
+  object sgDosen: TStringGrid
+    Left = 304
+    Top = 104
+    Width = 227
+    Height = 177
+    TabOrder = 2
+    OnSelectCell = sgDosenSelectCell
+  end
+  object btnTambah: TButton
+    Left = 110
+    Top = 232
+    Width = 75
+    Height = 33
+    Caption = 'Add'
+    TabOrder = 3
+    OnClick = btnTambahClick
+  end
+  object btnUpdate: TButton
+    Left = 206
+    Top = 232
+    Width = 75
+    Height = 33
+    Caption = 'Edit'
+    TabOrder = 4
+    OnClick = btnUpdateClick
+  end
+  object btnClear: TButton
+    Left = 206
+    Top = 280
+    Width = 75
+    Height = 33
+    Caption = 'Clear'
+    TabOrder = 5
+    OnClick = btnClearClick
+  end
+  object edtPassword: TEdit
+    Left = 160
+    Top = 192
+    Width = 121
+    Height = 21
+    TabOrder = 6
+  end
+  object btnExit: TButton
+    Left = 424
+    Top = 287
+    Width = 107
+    Height = 26
+    Caption = 'Exit'
+    TabOrder = 7
+    OnClick = btnExitClick
+  end
+  object btnRefresh: TButton
+    Left = 304
+    Top = 287
+    Width = 101
+    Height = 25
+    Caption = 'Refresh'
+    TabOrder = 8
+    OnClick = btnRefreshClick
+  end
+  object btnDelete: TButton
+    Left = 110
+    Top = 280
+    Width = 75
+    Height = 33
+    Caption = 'Delete'
+    TabOrder = 9
+    OnClick = DeleteClick
+  end
+end

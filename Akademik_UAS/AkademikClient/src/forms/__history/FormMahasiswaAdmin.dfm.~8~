@@ -1,0 +1,167 @@
+object FrmMahasiswaAdmin: TFrmMahasiswaAdmin
+  Left = 0
+  Top = 0
+  Caption = 'FrmMahasiswaAdmin'
+  ClientHeight = 413
+  ClientWidth = 635
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 206
+    Top = 56
+    Width = 199
+    Height = 25
+    Caption = 'Form Daftar Dosen'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 72
+    Top = 115
+    Width = 19
+    Height = 13
+    Caption = 'NIM'
+  end
+  object Label3: TLabel
+    Left = 72
+    Top = 155
+    Width = 82
+    Height = 13
+    Caption = 'Nama Mahasiswa'
+  end
+  object Label4: TLabel
+    Left = 72
+    Top = 263
+    Width = 46
+    Height = 13
+    Caption = 'Password'
+  end
+  object Label5: TLabel
+    Left = 72
+    Top = 195
+    Width = 25
+    Height = 13
+    Caption = 'Kelas'
+  end
+  object Label6: TLabel
+    Left = 72
+    Top = 222
+    Width = 38
+    Height = 13
+    Caption = 'Jurusan'
+  end
+  object edtNIM: TEdit
+    Left = 160
+    Top = 112
+    Width = 121
+    Height = 21
+    TabOrder = 0
+  end
+  object edtNama: TEdit
+    Left = 160
+    Top = 152
+    Width = 121
+    Height = 21
+    TabOrder = 1
+  end
+  object sgMahasiswa: TStringGrid
+    Left = 304
+    Top = 104
+    Width = 281
+    Height = 177
+    TabOrder = 2
+    OnSelectCell = sgMahasiswaSelectCell
+  end
+  object btnTambah: TButton
+    Left = 110
+    Top = 299
+    Width = 75
+    Height = 33
+    Caption = 'Add'
+    TabOrder = 3
+    OnClick = btnTambahClick
+  end
+  object btnUpdate: TButton
+    Left = 206
+    Top = 299
+    Width = 75
+    Height = 33
+    Caption = 'Edit'
+    TabOrder = 4
+    OnClick = btnUpdateClick
+  end
+  object btnClear: TButton
+    Left = 206
+    Top = 347
+    Width = 75
+    Height = 33
+    Caption = 'Clear'
+    TabOrder = 5
+  end
+  object edtPassword: TEdit
+    Left = 160
+    Top = 260
+    Width = 121
+    Height = 21
+    TabOrder = 6
+  end
+  object btnExit: TButton
+    Left = 456
+    Top = 287
+    Width = 129
+    Height = 26
+    Caption = 'Exit'
+    TabOrder = 7
+    OnClick = btnExitClick
+  end
+  object btnRefresh: TButton
+    Left = 304
+    Top = 287
+    Width = 146
+    Height = 25
+    Caption = 'Refresh'
+    TabOrder = 8
+    OnClick = btnRefreshClick
+  end
+  object btnDelete: TButton
+    Left = 110
+    Top = 347
+    Width = 75
+    Height = 33
+    Caption = 'Delete'
+    TabOrder = 9
+    OnClick = btnDeleteClick
+  end
+  object cbKelas: TComboBox
+    Left = 160
+    Top = 192
+    Width = 121
+    Height = 21
+    TabOrder = 10
+    Items.Strings = (
+      'TI-1A'
+      'TI-1B'
+      'TI-2A'
+      'TI-2B'
+      'TI-3A'
+      'TI-3B')
+  end
+  object edtJurusan: TEdit
+    Left = 160
+    Top = 219
+    Width = 121
+    Height = 21
+    TabOrder = 11
+  end
+end

@@ -1,0 +1,74 @@
+unit DosenModel;
+
+interface
+
+uses
+  System.JSON, ApiClient;
+
+type
+  TDosenModel = class
+  public
+    class function GetAll: TJSONArray;
+    class function Insert(Kode, Nama: string): Boolean;
+    class function Update(Kode, Nama: string): Boolean;
+    class function Delete(Kode: string): Boolean;
+  end;
+
+implementation
+
+class function TDosenModel.GetAll: TJSONArray;
+var
+  Res: TJSONObject;
+begin
+  Res := TApiClient.Get('/admin/dosen_read.php');
+  Result := Res.GetValue('data') as TJSONArray;
+end;
+
+class function TDosenModel.Insert(Kode, Nama: string): Boolean;
+var
+  Body, Res: TJSONObject;
+begin
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('nidn', Kode);
+    Body.AddPair('nama', Nama);
+
+    Res := TApiClient.Post('/admin/dosen_update.php', Body);
+    Result := Res.GetValue('status').AsType<Boolean>;
+  finally
+    Body.Free;
+  end;
+end;
+
+class function TDosenModel.Update(Kode, Nama: string): Boolean;
+var
+  Body, Res: TJSONObject;
+begin
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('nidn', Kode);
+    Body.AddPair('nama', Nama);
+
+    Res := TApiClient.Post('/admin/dosen_update.php', Body);
+    Result := Res.GetValue('status').AsType<Boolean>;
+  finally
+    Body.Free;
+  end;
+end;
+
+class function TDosenModel.Delete(Kode: string): Boolean;
+var
+  Body, Res: TJSONObject;
+begin
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('nidn', Kode);
+
+    Res := TApiClient.Post('/admin/dosen_delete.php', Body);
+    Result := Res.GetValue('status').AsType<Boolean>;
+  finally
+    Body.Free;
+  end;
+end;
+
+end.

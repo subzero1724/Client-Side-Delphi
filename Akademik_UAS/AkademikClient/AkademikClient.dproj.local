@@ -3,25 +3,25 @@
 	<Transactions>
     <Transaction>2026/01/13 18:54:53.000.512,=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2026/01/13 18:56:01.000.802,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\AkademikClient.dproj=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
-    <Transaction>2026/01/13 19:00:36.000.287,D:\Akademik_UAS\AkademikClient\src\main.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2026/01/13 19:00:36.000.287,D:\Akademik_UAS\AkademikClient\src\main.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2026/01/13 19:00:36.000.287,D:\Akademik_UAS\AkademikClient\src\main.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2026/01/13 19:01:14.000.367,=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>2026/01/13 19:01:39.000.058,D:\Akademik_UAS\AkademikClient\src\forms\FormLogin.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
     <Transaction>2026/01/13 19:01:39.000.058,D:\Akademik_UAS\AkademikClient\src\forms\FormLogin.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>2026/01/13 19:01:39.000.058,D:\Akademik_UAS\AkademikClient\src\forms\FormLogin.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
     <Transaction>2026/01/13 19:02:54.000.605,=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>2026/01/13 19:03:01.000.246,=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
     <Transaction>2026/01/13 19:03:08.000.762,=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2026/01/13 19:05:53.000.228,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormAdmin.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>2026/01/13 19:05:53.000.228,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormAdmin.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit3.dfm</Transaction>
-    <Transaction>2026/01/13 19:06:14.000.511,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormMahasiswa.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+    <Transaction>2026/01/13 19:05:53.000.228,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormAdmin.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>2026/01/13 19:06:14.000.511,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormMahasiswa.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit4.dfm</Transaction>
+    <Transaction>2026/01/13 19:06:14.000.511,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormMahasiswa.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
     <Transaction>2026/01/13 19:06:22.000.960,=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit5.pas</Transaction>
-    <Transaction>2026/01/13 19:06:35.000.368,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormDosen.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit5.pas</Transaction>
     <Transaction>2026/01/13 19:06:35.000.368,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormDosen.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit5.dfm</Transaction>
-    <Transaction>2026/01/13 19:06:44.000.308,D:\Akademik_UAS\AkademikClient\src\forms\FormDosen.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormDosen.dfm</Transaction>
+    <Transaction>2026/01/13 19:06:35.000.368,C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormDosen.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit5.pas</Transaction>
     <Transaction>2026/01/13 19:06:44.000.308,D:\Akademik_UAS\AkademikClient\src\forms\FormDosen.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormDosen.pas</Transaction>
-    <Transaction>2026/01/13 19:06:53.000.492,D:\Akademik_UAS\AkademikClient\src\forms\FormMahasiswa.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormMahasiswa.dfm</Transaction>
+    <Transaction>2026/01/13 19:06:44.000.308,D:\Akademik_UAS\AkademikClient\src\forms\FormDosen.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormDosen.dfm</Transaction>
     <Transaction>2026/01/13 19:06:53.000.492,D:\Akademik_UAS\AkademikClient\src\forms\FormMahasiswa.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormMahasiswa.pas</Transaction>
+    <Transaction>2026/01/13 19:06:53.000.492,D:\Akademik_UAS\AkademikClient\src\forms\FormMahasiswa.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormMahasiswa.dfm</Transaction>
     <Transaction>2026/01/13 19:06:56.000.848,D:\Akademik_UAS\AkademikClient\src\forms\FormAdmin.pas=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormAdmin.pas</Transaction>
     <Transaction>2026/01/13 19:06:56.000.848,D:\Akademik_UAS\AkademikClient\src\forms\FormAdmin.dfm=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\FormAdmin.dfm</Transaction>
     <Transaction>2026/01/13 19:07:32.000.498,=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
@@ -51,5 +51,17 @@
     <Transaction>2026/01/13 20:50:27.000.566,D:\Akademik_UAS\AkademikClient\src\main.pas=</Transaction>
     <Transaction>2026/01/13 20:52:28.000.005,D:\Akademik_UAS\AkademikClient\AkademikClient.dproj=C:\Users\RAFLI\Documents\Embarcadero\Studio\Projects\AkademikClient.dproj</Transaction>
     <Transaction>2026/01/13 20:57:35.000.158,=D:\Akademik_UAS\AkademikClient\AkademikClient.dpr</Transaction>
+    <Transaction>2026/01/14 20:54:48.000.186,=D:\Akademik_UAS\AkademikClient\Unit1.pas</Transaction>
+    <Transaction>2026/01/14 20:54:55.000.728,D:\Akademik_UAS\AkademikClient\Unit1.pas=D:\Akademik_UAS\AkademikClient\DosenModel.pas</Transaction>
+    <Transaction>2026/01/14 20:55:26.000.797,D:\Akademik_UAS\AkademikClient\DosenModel.pas=D:\Akademik_UAS\AkademikClient\src\models\DosenModel.pas</Transaction>
+    <Transaction>2026/01/16 20:37:20.000.852,D:\Akademik_UAS\AkademikClient\src\forms\FormDosenAdmin.pas=D:\Akademik_UAS\AkademikClient\src\forms\FormDosen.pas</Transaction>
+    <Transaction>2026/01/16 20:37:20.000.852,D:\Akademik_UAS\AkademikClient\src\forms\FormDosenAdmin.dfm=D:\Akademik_UAS\AkademikClient\src\forms\FormDosen.dfm</Transaction>
+    <Transaction>2026/01/24 20:16:56.000.859,D:\Akademik_UAS\AkademikClient\src\forms\FormMahasiswa.dfm=D:\Akademik_UAS\AkademikClient\src\forms\FormMahasiswaAdmin.dfm</Transaction>
+    <Transaction>2026/01/24 20:16:56.000.859,D:\Akademik_UAS\AkademikClient\src\forms\FormMahasiswa.pas=D:\Akademik_UAS\AkademikClient\src\forms\FormMahasiswaAdmin.pas</Transaction>
+    <Transaction>2026/01/25 20:38:50.066,=D:\Akademik_UAS\AkademikClient\Unit1.pas</Transaction>
+    <Transaction>2026/01/25 20:45:33.776,D:\Akademik_UAS\AkademikClient\DaftarKrs.dfm=D:\Akademik_UAS\AkademikClient\Unit1.dfm</Transaction>
+    <Transaction>2026/01/25 20:45:33.776,D:\Akademik_UAS\AkademikClient\DaftarKrs.pas=D:\Akademik_UAS\AkademikClient\Unit1.pas</Transaction>
+    <Transaction>2026/01/25 20:46:08.953,D:\Akademik_UAS\AkademikClient\src\forms\Mahasiswa\DaftarKrs.pas=D:\Akademik_UAS\AkademikClient\DaftarKrs.pas</Transaction>
+    <Transaction>2026/01/25 20:46:08.953,D:\Akademik_UAS\AkademikClient\src\forms\Mahasiswa\DaftarKrs.dfm=D:\Akademik_UAS\AkademikClient\DaftarKrs.dfm</Transaction>
   </Transactions>
 </BorlandProject>
