@@ -100,23 +100,18 @@
         </DelphiCompile>
         <DCCReference Include="src\forms\FormLogin.pas">
             <Form>FrmLogin</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\FormAdmin.pas">
             <Form>FrmAdmin</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\FormMahasiswaAdmin.pas">
             <Form>FrmMahasiswaAdmin</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\FormDosenAdmin.pas">
             <Form>FrmDosenAdmin</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\FormMK.pas">
             <Form>FrmMK</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\utils\ApiClient.pas"/>
         <DCCReference Include="src\utils\SessionManager.pas"/>
@@ -127,23 +122,18 @@
         <DCCReference Include="src\models\DosenModel.pas"/>
         <DCCReference Include="src\forms\Mahasiswa\DaftarKrs.pas">
             <Form>FormDaftarKrs</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\Dosen\FormInputNilai.pas">
             <Form>FormNilaiDosen</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\Mahasiswa\FormLihatNilai.pas">
             <Form>FrmLihatNilai</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\Mahasiswa\MainMenuMahasiswa.pas">
             <Form>MainForm</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\IPForm.pas">
             <Form>Form4</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <None Include="AkademikClient.dpr"/>
         <BuildConfiguration Include="Release">

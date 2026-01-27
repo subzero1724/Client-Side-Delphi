@@ -36,6 +36,9 @@ object FrmLihatNilai: TFrmLihatNilai
       Top = 56
       Width = 526
       Height = 169
+      ColCount = 7
+      FixedCols = 0
+      RowCount = 2
       TabOrder = 1
     end
   end

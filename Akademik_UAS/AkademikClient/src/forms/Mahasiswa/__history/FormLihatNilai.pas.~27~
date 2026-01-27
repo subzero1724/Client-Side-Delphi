@@ -1,0 +1,84 @@
+unit FormLihatNilai;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls;
+
+type
+  TFrmLihatNilai = class(TForm)
+    GroupBox1: TGroupBox;
+    sgNilai: TStringGrid;
+    btnRefresh: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+  private
+    procedure SetupGrid;
+    procedure LoadNilaiStatis;
+  public
+  end;
+
+var
+  FrmLihatNilai: TFrmLihatNilai;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmLihatNilai.FormShow(Sender: TObject);
+begin
+  SetupGrid;
+  LoadNilaiStatis;
+end;
+
+procedure TFrmLihatNilai.SetupGrid;
+begin
+  sgNilai.ColCount := 7;    // pastikan sama dengan jumlah header
+  sgNilai.RowCount := 2;     // 1 header + 1 data
+  sgNilai.FixedRows := 1;    // header tetap terlihat
+  sgNilai.FixedCols := 0;    // tidak ada kolom tetap
+
+  // Nama kolom (header)
+  sgNilai.Cells[0,0] := 'id_nilai';
+  sgNilai.Cells[1,0] := 'MataKuliah';
+  sgNilai.Cells[2,0] := 'Grade';
+  sgNilai.Cells[3,0] := 'Tugas';
+  sgNilai.Cells[4,0] := 'Kuis';
+  sgNilai.Cells[5,0] := 'UTS';
+  sgNilai.Cells[6,0] := 'UAS';
+
+  // Atur lebar kolom supaya header tidak terpotong
+  sgNilai.ColWidths[0] := 70;
+  sgNilai.ColWidths[1] := 120;
+  sgNilai.ColWidths[2] := 50;
+  sgNilai.ColWidths[3] := 50;
+  sgNilai.ColWidths[4] := 50;
+  sgNilai.ColWidths[5] := 50;
+  sgNilai.ColWidths[6] := 50;
+
+  sgNilai.Options := sgNilai.Options + [goFixedHorzLine, goFixedVertLine, goVertLine, goHorzLine];
+end;
+
+procedure TFrmLihatNilai.LoadNilaiStatis;
+begin
+  // pastikan ada cukup baris
+  sgNilai.RowCount := 2;  // header + 1 baris data
+
+  // isi data statis
+  sgNilai.Cells[0,1] := '4';       // id_nilai
+  sgNilai.Cells[1,1] := 'IMK'; // MataKuliah
+  sgNilai.Cells[2,1] := 'A';       // Grade
+  sgNilai.Cells[3,1] := '100';     // Tugas
+  sgNilai.Cells[4,1] := '100';     // Kuis
+  sgNilai.Cells[5,1] := '100';     // UTS
+  sgNilai.Cells[6,1] := '100';     // UAS
+end;
+
+procedure TFrmLihatNilai.btnRefreshClick(Sender: TObject);
+begin
+  LoadNilaiStatis;
+end;
+
+end.
+

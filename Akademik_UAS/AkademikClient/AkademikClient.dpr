@@ -27,6 +27,7 @@ begin
   Application.MainFormOnTaskbar := True;
 
   // ✅ HANYA LOGIN
+  Application.CreateForm(TForm4, Form4);
   Application.CreateForm(TFrmLogin, FrmLogin);
   Application.CreateForm(TFormDaftarKrs, FormDaftarKrs);
   Application.CreateForm(TFormNilaiDosen, FormNilaiDosen);

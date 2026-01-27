@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, AppConfig;
 
 type
   TForm4 = class(TForm)
@@ -13,6 +13,7 @@ type
     Edit1: TEdit;
     Label2: TLabel;
     Button1: TButton;
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -25,5 +26,19 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TForm4.Button1Click(Sender: TObject);
+begin
+  if Trim(Edit1.Text) = '' then
+  begin
+    ShowMessage('Masukkan IP terlebih dahulu');
+    Exit;
+  end;
+
+  SetBaseURL(Edit1.Text); // update BASE_URL global
+  ShowMessage('BASE_URL diubah menjadi: ' + BASE_URL);
+  ModalResult := mrOk;
+end;
+
 
 end.
