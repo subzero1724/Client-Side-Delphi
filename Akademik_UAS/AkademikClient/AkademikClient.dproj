@@ -129,6 +129,22 @@
             <Form>FormDaftarKrs</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\forms\Dosen\FormInputNilai.pas">
+            <Form>Form2</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\forms\Mahasiswa\FormLihatNilai.pas">
+            <Form>Form3</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\forms\Mahasiswa\MainMenuMahasiswa.pas">
+            <Form>Form1</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\forms\IPForm.pas">
+            <Form>Form4</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="AkademikClient.dpr"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

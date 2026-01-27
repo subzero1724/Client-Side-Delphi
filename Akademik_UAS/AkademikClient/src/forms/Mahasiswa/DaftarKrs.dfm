@@ -45,7 +45,7 @@ object FormDaftarKrs: TFormDaftarKrs
     Top = 303
     Width = 75
     Height = 25
-    Caption = 'Button1'
+    Caption = 'Masukan'
     TabOrder = 2
   end
   object Button2: TButton
@@ -53,7 +53,7 @@ object FormDaftarKrs: TFormDaftarKrs
     Top = 303
     Width = 75
     Height = 25
-    Caption = 'Button1'
+    Caption = 'Hapus'
     TabOrder = 3
   end
   object Button3: TButton
@@ -61,7 +61,7 @@ object FormDaftarKrs: TFormDaftarKrs
     Top = 368
     Width = 75
     Height = 32
-    Caption = 'Button1'
+    Caption = 'Simpan'
     TabOrder = 4
   end
 end
