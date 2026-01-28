@@ -1,0 +1,48 @@
+unit MainMenuMahasiswa;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, Vcl.Menus;
+
+type
+  TMainForm = class(TForm)
+    MainMenu1: TMainMenu;
+    LihatNilai1: TMenuItem;
+    BuatKRS1: TMenuItem;
+    procedure BuatKRS1Click(Sender: TObject);
+    procedure LihatNilai1Click(Sender: TObject);
+  end;
+
+var
+  MainForm: TMainForm;
+
+implementation
+
+uses
+  DaftarKrs,
+  FormLihatNilai;
+
+{$R *.dfm}
+
+procedure TMainForm.BuatKRS1Click(Sender: TObject);
+begin
+  if not Assigned(FormDaftarKrs) then
+    Application.CreateForm(TFormDaftarKrs, FormDaftarKrs);
+
+  FormDaftarKrs.Show;
+end;
+
+procedure TMainForm.LihatNilai1Click(Sender: TObject);
+begin
+  if not Assigned(FormLihatNilai) then
+    Application.CreateForm(TFrmLihatNilai, FormLihatNilai);
+
+  FrmLihatNilai.Show;
+end;
+
+end.
+

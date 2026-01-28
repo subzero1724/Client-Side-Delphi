@@ -8,7 +8,7 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls,
   System.JSON,
-  FormAdmin, FormDosenAdmin, FormMahasiswaAdmin,
+  FormAdmin, FormDosenAdmin, FormMahasiswaAdmin,MainMenuMahasiswa,FormInputNilai,
   ApiClient, SessionManager, UserModel;
 
 type
@@ -87,13 +87,13 @@ begin
     end
     else if User.Role = 'dosen' then
     begin
-//      FrmDosenAdmin := TFrmDosenAdmin.Create(Application);
-//      FrmDosenAdmin.Show;
+      FormNilaiDosen := TFormNilaiDosen.Create(Application);
+      FormNilaiDosen.Show;
     end
     else if User.Role = 'mahasiswa' then
     begin
-//      FrmMahasiswa := TFrmMahasiswa.Create(Application);
-//      FrmMahasiswa.Show;
+      MainForm := TMainForm.Create(Application);
+      MainForm.Show;
     end
     else
     begin

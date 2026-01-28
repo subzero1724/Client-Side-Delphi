@@ -1,0 +1,70 @@
+object FrmLihatNilai: TFrmLihatNilai
+  Left = 0
+  Top = 0
+  Align = alClient
+  BorderStyle = bsNone
+  Caption = 'FrmLihatNilai'
+  ClientHeight = 558
+  ClientWidth = 843
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 40
+    Top = 40
+    Width = 657
+    Height = 433
+    Caption = 'Dashboard'
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 40
+      Top = 56
+      Width = 577
+      Height = 177
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'Mata Kuliah'
+          Width = 121
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Nama Dosen'
+          Width = 150
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'SKS'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Grade'
+          Visible = True
+        end>
+    end
+    object btnRefresh: TButton
+      Left = 128
+      Top = 248
+      Width = 385
+      Height = 65
+      Caption = 'btnRefresh'
+      TabOrder = 1
+      OnClick = btnRefreshClick
+    end
+  end
+end

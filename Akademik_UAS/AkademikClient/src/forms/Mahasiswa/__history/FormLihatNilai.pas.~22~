@@ -1,0 +1,130 @@
+unit FormLihatNilai;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
+  System.JSON, ApiClient;
+
+type
+  TFrmLihatNilai = class(TForm)
+    GroupBox1: TGroupBox;
+    sgNilai: TStringGrid;
+    btnRefresh: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+  private
+    procedure LoadNilai;
+    procedure SetupGrid;
+    function SafeGetValue(Obj: TJSONObject; const Key: string): string;
+  public
+  end;
+
+var
+  FrmLihatNilai: TFrmLihatNilai;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmLihatNilai.FormShow(Sender: TObject);
+begin
+  SetupGrid;
+  LoadNilai;
+end;
+
+procedure TFrmLihatNilai.SetupGrid;
+begin
+  sgNilai.RowCount := 2; // 1 header + minimal 1 data
+  sgNilai.ColCount := 8;
+  sgNilai.FixedRows := 1;
+
+  sgNilai.Cells[0,0] := 'Kode MK';
+  sgNilai.Cells[1,0] := 'Nama MK';
+  sgNilai.Cells[2,0] := 'Nama Dosen';
+  sgNilai.Cells[3,0] := 'Tugas';
+  sgNilai.Cells[4,0] := 'Kuis';
+  sgNilai.Cells[5,0] := 'UTS';
+  sgNilai.Cells[6,0] := 'UAS';
+  sgNilai.Cells[7,0] := 'Grade';
+end;
+
+// Fungsi helper untuk mengambil value dari JSON dengan aman
+function TFrmLihatNilai.SafeGetValue(Obj: TJSONObject; const Key: string): string;
+var
+  Val: TJSONValue;
+begin
+  Val := Obj.GetValue(Key);
+  if Val <> nil then
+    Result := Val.Value
+  else
+    Result := '';
+end;
+
+procedure TFrmLihatNilai.LoadNilai;
+var
+  Res: TJSONValue;
+  RootObj: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  i, RowIdx: Integer;
+begin
+  sgNilai.RowCount := 1; // reset
+
+  Res := TApiClient.Get('/mahasiswa/nilai_saya.php');
+  if Res = nil then
+  begin
+    ShowMessage('Gagal mengambil data dari server.');
+    Exit;
+  end;
+
+  if Res is TJSONObject then
+  begin
+    RootObj := TJSONObject(Res);
+    if RootObj.GetValue('data') is TJSONArray then
+      Arr := TJSONArray(RootObj.GetValue('data'))
+    else
+    begin
+      ShowMessage('JSON root tidak mengandung array "data".');
+      Exit;
+    end;
+  end
+  else if Res is TJSONArray then
+    Arr := TJSONArray(Res)
+  else
+  begin
+    ShowMessage('Response API tidak valid.');
+    Exit;
+  end;
+
+  sgNilai.RowCount := Arr.Count + 1; // +1 header
+
+  for i := 0 to Arr.Count - 1 do
+  begin
+    if Arr.Items[i] is TJSONObject then
+    begin
+      Obj := TJSONObject(Arr.Items[i]);
+      RowIdx := i + 1;
+
+      sgNilai.Cells[0, RowIdx] := SafeGetValue(Obj, 'kode_mk');
+      sgNilai.Cells[1, RowIdx] := SafeGetValue(Obj, 'nama_mk');
+      sgNilai.Cells[2, RowIdx] := SafeGetValue(Obj, 'nama_dosen');
+      sgNilai.Cells[3, RowIdx] := SafeGetValue(Obj, 'tugas');
+      sgNilai.Cells[4, RowIdx] := SafeGetValue(Obj, 'kuis');
+      sgNilai.Cells[5, RowIdx] := SafeGetValue(Obj, 'uts');
+      sgNilai.Cells[6, RowIdx] := SafeGetValue(Obj, 'uas');
+      sgNilai.Cells[7, RowIdx] := SafeGetValue(Obj, 'grade');
+    end;
+  end;
+end;
+
+
+
+procedure TFrmLihatNilai.btnRefreshClick(Sender: TObject);
+begin
+  LoadNilai;
+end;
+
+end.
+

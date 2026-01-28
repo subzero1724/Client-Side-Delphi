@@ -1,0 +1,96 @@
+unit FormLihatNilai;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
+  System.JSON, ApiClient;
+
+type
+  TFrmLihatNilai = class(TForm)
+    GroupBox1: TGroupBox;
+    sgNilai: TStringGrid;
+    btnRefresh: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+  private
+    procedure LoadNilai;
+    procedure SetupGrid;
+  public
+  end;
+
+var
+  FrmLihatNilai: TFrmLihatNilai;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmLihatNilai.FormShow(Sender: TObject);
+begin
+  SetupGrid;
+  LoadNilai;
+end;
+
+procedure TFrmLihatNilai.SetupGrid;
+begin
+  sgNilai.RowCount := 2; // 1 header + minimal 1 data
+  sgNilai.ColCount := 8;
+  sgNilai.FixedRows := 1;
+
+  sgNilai.Cells[0,0] := 'Kode MK';
+  sgNilai.Cells[1,0] := 'Nama MK';
+  sgNilai.Cells[2,0] := 'Nama Dosen';
+  sgNilai.Cells[3,0] := 'Tugas';
+  sgNilai.Cells[4,0] := 'Kuis';
+  sgNilai.Cells[5,0] := 'UTS';
+  sgNilai.Cells[6,0] := 'UAS';
+  sgNilai.Cells[7,0] := 'Grade';
+end;
+
+procedure TFrmLihatNilai.LoadNilai;
+var
+  Res: TJSONValue;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  i, RowIdx: Integer;
+begin
+  // Hapus data lama
+  sgNilai.RowCount := 1;
+
+  Res := TApiClient.Get('/mahasiswa/nilai_saya.php'); // ambil semua nilai
+  if Res = nil then Exit;
+
+  if not (Res is TJSONArray) then
+  begin
+    ShowMessage('Response API tidak valid.');
+    Exit;
+  end;
+
+  Arr := Res as TJSONArray;
+
+  sgNilai.RowCount := Arr.Count + 1; // +1 header
+  for i := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[i] as TJSONObject;
+    RowIdx := i + 1;
+
+    sgNilai.Cells[0, RowIdx] := Obj.GetValue('kode_mk').Value;
+    sgNilai.Cells[1, RowIdx] := Obj.GetValue('nama_mk').Value;
+    sgNilai.Cells[2, RowIdx] := Obj.GetValue('nama_dosen').Value;
+    sgNilai.Cells[3, RowIdx] := Obj.GetValue('tugas').Value;
+    sgNilai.Cells[4, RowIdx] := Obj.GetValue('kuis').Value;
+    sgNilai.Cells[5, RowIdx] := Obj.GetValue('uts').Value;
+    sgNilai.Cells[6, RowIdx] := Obj.GetValue('uas').Value;
+    sgNilai.Cells[7, RowIdx] := Obj.GetValue('grade').Value;
+  end;
+end;
+
+procedure TFrmLihatNilai.btnRefreshClick(Sender: TObject);
+begin
+  LoadNilai;
+end;
+
+end.
+

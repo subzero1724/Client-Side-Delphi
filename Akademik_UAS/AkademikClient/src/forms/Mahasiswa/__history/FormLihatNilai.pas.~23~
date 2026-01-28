@@ -1,0 +1,71 @@
+unit FormLihatNilai;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls;
+
+type
+  TFrmLihatNilai = class(TForm)
+    GroupBox1: TGroupBox;
+    sgNilai: TStringGrid;
+    btnRefresh: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+  private
+    procedure SetupGrid;
+    procedure LoadNilaiStatis;
+  public
+  end;
+
+var
+  FrmLihatNilai: TFrmLihatNilai;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmLihatNilai.FormShow(Sender: TObject);
+begin
+  SetupGrid;
+  LoadNilaiStatis; // tampilkan data langsung saat form show
+end;
+
+procedure TFrmLihatNilai.SetupGrid;
+begin
+  sgNilai.RowCount := 2; // header + minimal 1 data
+  sgNilai.ColCount := 7;
+  sgNilai.FixedRows := 1;
+
+  sgNilai.Cells[0,0] := 'id_nilai';
+  sgNilai.Cells[1,0] := 'MataKuliah';
+  sgNilai.Cells[2,0] := 'Grade';
+  sgNilai.Cells[3,0] := 'Tugas';
+  sgNilai.Cells[4,0] := 'Kuis';
+  sgNilai.Cells[5,0] := 'UTS';
+  sgNilai.Cells[6,0] := 'UAS';
+end;
+
+procedure TFrmLihatNilai.LoadNilaiStatis;
+begin
+  // Set jumlah baris data
+  sgNilai.RowCount := 2; // header + 1 data
+
+  // Isi data contoh
+  sgNilai.Cells[0,1] := '4';            // id_nilai
+  sgNilai.Cells[1,1] := '2';            // MataKuliah (misal kode / ID MK)
+  sgNilai.Cells[2,1] := 'A';            // Grade
+  sgNilai.Cells[3,1] := '100';          // Tugas
+  sgNilai.Cells[4,1] := '100';          // Kuis
+  sgNilai.Cells[5,1] := '100';          // UTS
+  sgNilai.Cells[6,1] := '100';          // UAS
+end;
+
+procedure TFrmLihatNilai.btnRefreshClick(Sender: TObject);
+begin
+  LoadNilaiStatis; // refresh dengan data statis
+end;
+
+end.
+

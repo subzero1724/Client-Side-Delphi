@@ -1,0 +1,185 @@
+unit FormInputNilai;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, System.JSON, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, ApiClient;
+
+type
+  TFormNilaiDosen = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    cbMataKuliah: TComboBox;
+    Label2: TLabel;
+    cbMahasiswa: TComboBox;
+    btnSimpan: TButton;
+    GroupBox2: TGroupBox;
+    edtUts: TEdit;
+    edtUAS: TEdit;
+    edtTugas: TEdit;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Panel1: TPanel;
+    edtGrade: TEdit;
+    procedure FormShow(Sender: TObject);
+    procedure cbMataKuliahChange(Sender: TObject);
+    procedure btnSimpanClick(Sender: TObject);
+  private
+    procedure LoadMataKuliah;
+    procedure LoadMahasiswa(idMK: string);
+    function HitungGrade: string;
+  public
+  end;
+
+var
+  FormNilaiDosen: TFormNilaiDosen;
+
+implementation
+
+{$R *.dfm}
+
+{ ================= INIT ================= }
+
+procedure TFormNilaiDosen.FormShow(Sender: TObject);
+begin
+  cbMataKuliah.Clear;
+  cbMahasiswa.Clear;
+  edtUts.Clear;
+  edtUAS.Clear;
+  edtTugas.Clear;
+  edtGrade.Clear;
+  LoadMataKuliah;
+end;
+
+{ ================= LOAD MATA KULIAH ================= }
+
+procedure TFormNilaiDosen.LoadMataKuliah;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  i: Integer;
+begin
+  Res := TApiClient.Get('/dosen/mk_saya.php');
+  if Res = nil then Exit;
+  Arr := Res.GetValue<TJSONArray>('data');
+  if Arr = nil then Exit;
+
+  cbMataKuliah.Items.Clear;
+  for i := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[i] as TJSONObject;
+    cbMataKuliah.Items.AddObject(
+      Obj.GetValue('nama_mk').Value,
+      TObject(StrToInt(Obj.GetValue('id_matakuliah').Value))
+    );
+  end;
+end;
+
+{ ================= LOAD MAHASISWA ================= }
+
+procedure TFormNilaiDosen.LoadMahasiswa(idMK: string);
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  i: Integer;
+begin
+  Res := TApiClient.Get('/dosen/mahasiswa_kelas.php?id_matakuliah=' + idMK);
+  if (Res = nil) or (Res.GetValue('status').Value <> 'true') then Exit;
+
+  Arr := Res.GetValue<TJSONArray>('data');
+  if Arr = nil then Exit;
+
+  cbMahasiswa.Items.Clear;
+  for i := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[i] as TJSONObject;
+    cbMahasiswa.Items.AddObject(
+      Obj.GetValue('nama').Value,
+      TObject(StrToInt(Obj.GetValue('id_mahasiswa').Value))
+    );
+  end;
+end;
+
+{ ================= EVENT MATA KULIAH ================= }
+
+procedure TFormNilaiDosen.cbMataKuliahChange(Sender: TObject);
+var
+  idMK: string;
+begin
+  if cbMataKuliah.ItemIndex = -1 then Exit;
+  idMK := IntToStr(Integer(cbMataKuliah.Items.Objects[cbMataKuliah.ItemIndex]));
+  LoadMahasiswa(idMK);
+end;
+
+{ ================= HITUNG GRADE ================= }
+
+function TFormNilaiDosen.HitungGrade: string;
+var
+  total: Double;
+begin
+  total := StrToFloatDef(edtUts.Text,0)*0.3 +
+           StrToFloatDef(edtUAS.Text,0)*0.4 +
+           StrToFloatDef(edtTugas.Text,0)*0.3;
+
+  if total >= 85 then Result := 'A'
+  else if total >= 70 then Result := 'B'
+  else if total >= 55 then Result := 'C'
+  else if total >= 40 then Result := 'D'
+  else Result := 'E';
+end;
+
+{ ================= SIMPAN NILAI ================= }
+
+procedure TFormNilaiDosen.btnSimpanClick(Sender: TObject);
+var
+  idMK, idMhs: string;
+  Body: TJSONObject;
+  Res: TJSONObject;
+begin
+  if cbMataKuliah.ItemIndex = -1 then
+  begin
+    ShowMessage('Pilih mata kuliah dulu');
+    Exit;
+  end;
+
+  if cbMahasiswa.ItemIndex = -1 then
+  begin
+    ShowMessage('Pilih mahasiswa dulu');
+    Exit;
+  end;
+
+  idMK  := IntToStr(Integer(cbMataKuliah.Items.Objects[cbMataKuliah.ItemIndex]));
+  idMhs := IntToStr(Integer(cbMahasiswa.Items.Objects[cbMahasiswa.ItemIndex]));
+
+  edtGrade.Text := HitungGrade;
+
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('id_matakuliah', idMK);
+    Body.AddPair('id_mahasiswa', idMhs);
+    Body.AddPair('uts', TJSONNumber.Create(StrToFloatDef(edtUts.Text,0)));
+    Body.AddPair('uas', TJSONNumber.Create(StrToFloatDef(edtUAS.Text,0)));
+    Body.AddPair('tugas', TJSONNumber.Create(StrToFloatDef(edtTugas.Text,0)));
+    Body.AddPair('grade', edtGrade.Text);
+
+    Res := TApiClient.Post('/dosen/input_nilai.php', Body);
+
+    if (Res <> nil) and (Res.GetValue('status').Value = 'true') then
+      ShowMessage('Nilai berhasil disimpan')
+    else
+      ShowMessage('Gagal menyimpan nilai');
+
+  finally
+    Body.Free;
+  end;
+end;
+
+end.
+

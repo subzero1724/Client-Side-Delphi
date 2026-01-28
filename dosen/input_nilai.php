@@ -2,24 +2,37 @@
 require_once "../config/database.php";
 require_once "../utils/response.php";
 require_once "../utils/auth.php";
-require_once "../utils/nilai_helper.php";
 
 // 🔐 dosen only
 $user = roleGuard("dosen");
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$id_krs = $data['id_krs'] ?? null;
+$id_mahasiswa = $data['id_mahasiswa'] ?? null;
+$id_matakuliah = $data['id_matakuliah'] ?? null;
 $tugas  = $data['tugas'] ?? null;
 $kuis   = $data['kuis'] ?? null;
 $uts    = $data['uts'] ?? null;
 $uas    = $data['uas'] ?? null;
 
-if (!$id_krs || $tugas === null || $kuis === null || $uts === null || $uas === null) {
+if (!$id_mahasiswa || !$id_matakuliah || $tugas === null || $kuis === null || $uts === null || $uas === null) {
     response(false, "Semua field nilai wajib diisi");
 }
 
-// hitung
+// Cari id_krs dari tabel krs
+$stmtKrs = $conn->prepare("SELECT id_krs FROM krs WHERE id_mahasiswa = ? AND id_matakuliah = ?");
+$stmtKrs->bind_param("ii", $id_mahasiswa, $id_matakuliah);
+$stmtKrs->execute();
+$resKrs = $stmtKrs->get_result();
+
+if ($resKrs->num_rows === 0) {
+    response(false, "Mahasiswa belum mengambil mata kuliah ini");
+}
+
+$row = $resKrs->fetch_assoc();
+$id_krs = $row['id_krs'];
+
+// hitung nilai akhir dan grade
 $nilai_akhir = hitungNilaiAkhir($tugas, $kuis, $uts, $uas);
 $grade = hitungGrade($nilai_akhir);
 
@@ -33,12 +46,12 @@ if ($res->num_rows > 0) {
     // update
     $stmt = $conn->prepare("
         UPDATE nilai 
-        SET tugas=?, kuis=?, uts=?, uas=?, nilai_akhir=?, grade=?
+        SET tugas=?, kuis=?, uts=?, uas=?, grade=?
         WHERE id_krs=?
     ");
     $stmt->bind_param(
-        "iiiidsi",
-        $tugas, $kuis, $uts, $uas, $nilai_akhir, $grade, $id_krs
+        "iiiisi",
+        $tugas, $kuis, $uts, $uas, $grade, $id_krs
     );
     $stmt->execute();
 
@@ -46,12 +59,12 @@ if ($res->num_rows > 0) {
 } else {
     // insert
     $stmt = $conn->prepare("
-        INSERT INTO nilai (id_krs, tugas, kuis, uts, uas, nilai_akhir, grade)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO nilai (id_krs, tugas, kuis, uts, uas, grade)
+        VALUES (?, ?, ?, ?, ?, ?)
     ");
     $stmt->bind_param(
-        "iiiiids",
-        $id_krs, $tugas, $kuis, $uts, $uas, $nilai_akhir, $grade
+        "iiiiis",
+        $id_krs, $tugas, $kuis, $uts, $uas, $grade
     );
     $stmt->execute();
 
@@ -72,4 +85,3 @@ function hitungGrade($nilai) {
     if ($nilai >= 50) return "D";
     return "E";
 }
-

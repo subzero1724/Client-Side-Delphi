@@ -1,25 +1,18 @@
 <?php
 include "../config/database.php";
 
-$id_mahasiswa = $_GET['id_mahasiswa'];
-
+// Ambil semua data dari tabel nilai
 $sql = "
 SELECT
-    mk.kode_mk,
-    mk.nama_mk,
-    d.nama AS nama_dosen,
-    n.tugas,
-    n.kuis,
-    n.uts,
-    n.uas,
-    n.nilai_akhir,
-    n.grade
-FROM nilai n
-JOIN krs k ON n.id_krs = k.id_krs
-JOIN mengajar mg ON k.id_mengajar = mg.id_mengajar
-JOIN dosen d ON mg.id_dosen = d.id_dosen
-JOIN matakuliah mk ON mg.id_matakuliah = mk.id_matakuliah
-WHERE k.id_mahasiswa = $id_mahasiswa
+    id_nilai,
+    id_krs,
+    tugas,
+    kuis,
+    uts,
+    uas,
+    grade
+FROM nilai
+ORDER BY id_nilai ASC
 ";
 
 $result = $conn->query($sql);

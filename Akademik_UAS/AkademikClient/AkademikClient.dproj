@@ -130,15 +130,15 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\Dosen\FormInputNilai.pas">
-            <Form>Form2</Form>
+            <Form>FormNilaiDosen</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\Mahasiswa\FormLihatNilai.pas">
-            <Form>Form3</Form>
+            <Form>FrmLihatNilai</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\Mahasiswa\MainMenuMahasiswa.pas">
-            <Form>Form1</Form>
+            <Form>MainForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\forms\IPForm.pas">

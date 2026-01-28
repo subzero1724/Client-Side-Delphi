@@ -1,0 +1,216 @@
+﻿unit DaftarKrs;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  System.JSON,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Grids,
+  ApiClient;
+
+type
+  TFormDaftarKrs = class(TForm)
+    Label1: TLabel;
+    sgInputKRS: TStringGrid;
+    sgViewKRS: TStringGrid;
+    btnInput: TButton;
+    btnHapus: TButton;
+    btnRefresh: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure btnInputClick(Sender: TObject);
+    procedure btnHapusClick(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+    procedure sgInputKRSSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure sgViewKRSSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+  private
+    procedure SetupGrids;
+    procedure LoadMK;
+    procedure LoadKRS;
+    procedure AmbilMK;
+    procedure HapusKRS;
+  public
+  end;
+
+var
+  FormDaftarKrs: TFormDaftarKrs;
+
+implementation
+
+{$R *.dfm}
+
+{ ===================== INIT ===================== }
+
+procedure TFormDaftarKrs.FormCreate(Sender: TObject);
+begin
+  SetupGrids;
+  LoadMK;
+  LoadKRS;
+end;
+
+procedure TFormDaftarKrs.SetupGrids;
+begin
+  { === Grid Input MK === }
+  sgInputKRS.ColCount := 5;
+  sgInputKRS.FixedRows := 1;
+  sgInputKRS.RowCount := 1;
+  sgInputKRS.Options := sgInputKRS.Options + [goRowSelect];
+  sgInputKRS.Cells[0,0] := 'ID';
+  sgInputKRS.Cells[1,0] := 'Kode';
+  sgInputKRS.Cells[2,0] := 'Nama';
+  sgInputKRS.Cells[3,0] := 'SKS';
+  sgInputKRS.Cells[4,0] := 'Dosen';
+  sgInputKRS.ColWidths[0] := 0;
+
+  { === Grid KRS Mahasiswa === }
+  sgViewKRS.ColCount := 5;
+  sgViewKRS.FixedRows := 1;
+  sgViewKRS.RowCount := 1;
+  sgViewKRS.Options := sgViewKRS.Options + [goRowSelect];
+  sgViewKRS.Cells[0,0] := 'ID';
+  sgViewKRS.Cells[1,0] := 'Kode';
+  sgViewKRS.Cells[2,0] := 'Nama';
+  sgViewKRS.Cells[3,0] := 'SKS';
+  sgViewKRS.Cells[4,0] := 'Dosen';
+  sgViewKRS.ColWidths[0] := 0;
+
+  btnInput.Enabled := False;
+  btnHapus.Enabled := False;
+end;
+
+{ ===================== LOAD DATA ===================== }
+
+procedure TFormDaftarKrs.LoadMK;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  i: Integer;
+begin
+  Res := TApiClient.Get('/mahasiswa/list_mk.php');
+  if Res = nil then Exit;
+
+  Arr := Res.GetValue<TJSONArray>('data');
+  if Arr = nil then Exit;
+
+  sgInputKRS.RowCount := Arr.Count + 1;
+  for i := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[i] as TJSONObject;
+    sgInputKRS.Cells[0,i+1] := Obj.GetValue<string>('id_matakuliah');
+    sgInputKRS.Cells[1,i+1] := Obj.GetValue<string>('kode_mk');
+    sgInputKRS.Cells[2,i+1] := Obj.GetValue<string>('nama_mk');
+    sgInputKRS.Cells[3,i+1] := Obj.GetValue<string>('sks');
+    sgInputKRS.Cells[4,i+1] := Obj.GetValue<string>('nama_dosen');
+  end;
+end;
+
+procedure TFormDaftarKrs.LoadKRS;
+var
+  Res: TJSONObject;
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  i: Integer;
+begin
+  Res := TApiClient.Get('/mahasiswa/ambil_mk.php');
+  if Res = nil then Exit;
+
+  Arr := Res.GetValue<TJSONArray>('data');
+  if Arr = nil then Exit;
+
+  sgViewKRS.RowCount := Arr.Count + 1;
+  for i := 0 to Arr.Count - 1 do
+  begin
+    Obj := Arr.Items[i].GetValue<TJSONObject>('mata_kuliah');
+    sgViewKRS.Cells[0,i+1] := Obj.GetValue<string>('id_matakuliah');
+    sgViewKRS.Cells[1,i+1] := Obj.GetValue<string>('kode_mk');
+    sgViewKRS.Cells[2,i+1] := Obj.GetValue<string>('nama_mk');
+    sgViewKRS.Cells[3,i+1] := Obj.GetValue<string>('sks');
+    sgViewKRS.Cells[4,i+1] := Obj.GetValue<string>('nama_dosen');
+  end;
+end;
+
+{ ===================== GRID SELECT ===================== }
+
+procedure TFormDaftarKrs.sgInputKRSSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  CanSelect := ARow > 0;
+  btnInput.Enabled := CanSelect;
+end;
+
+procedure TFormDaftarKrs.sgViewKRSSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  CanSelect := ARow > 0;
+  btnHapus.Enabled := CanSelect;
+end;
+
+{ ===================== BUTTON ===================== }
+
+procedure TFormDaftarKrs.btnInputClick(Sender: TObject);
+begin
+  AmbilMK;
+end;
+
+procedure TFormDaftarKrs.btnHapusClick(Sender: TObject);
+begin
+  HapusKRS;
+end;
+
+procedure TFormDaftarKrs.btnRefreshClick(Sender: TObject);
+begin
+  LoadMK;
+  LoadKRS;
+end;
+
+{ ===================== LOGIC ===================== }
+
+procedure TFormDaftarKrs.AmbilMK;
+var
+  idMK: string;
+  Body, Res: TJSONObject;
+begin
+  if sgInputKRS.Row = 0 then Exit;
+
+  idMK := sgInputKRS.Cells[0, sgInputKRS.Row];
+
+  Body := TJSONObject.Create;
+  try
+    Body.AddPair('id_matakuliah', idMK);
+    Res := TApiClient.Post('/mahasiswa/ambil_mk.php', Body);
+
+    if (Res = nil) or (Res.GetValue('status').Value <> 'true') then
+    begin
+      ShowMessage('Gagal mengambil MK: ' + Res.GetValue('message').Value);
+      Exit;
+    end;
+
+    // tambahkan langsung ke sgViewKRS
+    sgViewKRS.RowCount := sgViewKRS.RowCount + 1;
+    sgViewKRS.Cells[0, sgViewKRS.RowCount-1] := Res.GetValue<TJSONObject>('data').GetValue<TJSONObject>('mata_kuliah').GetValue('id_matakuliah');
+    sgViewKRS.Cells[1, sgViewKRS.RowCount-1] := Res.GetValue<TJSONObject>('data').GetValue<TJSONObject>('mata_kuliah').GetValue('kode_mk');
+    sgViewKRS.Cells[2, sgViewKRS.RowCount-1] := Res.GetValue<TJSONObject>('data').GetValue<TJSONObject>('mata_kuliah').GetValue('nama_mk');
+    sgViewKRS.Cells[3, sgViewKRS.RowCount-1] := Res.GetValue<TJSONObject>('data').GetValue<TJSONObject>('mata_kuliah').GetValue('sks');
+    sgViewKRS.Cells[4, sgViewKRS.RowCount-1] := Res.GetValue<TJSONObject>('data').GetValue<TJSONObject>('mata_kuliah').GetValue('nama_dosen');
+
+  finally
+    Body.Free;
+  end;
+end;
+
+procedure TFormDaftarKrs.HapusKRS;
+var
+  r: Integer;
+begin
+  if sgViewKRS.Row = 0 then Exit;
+
+  // optional: bisa request hapus ke API juga
+//  sgViewKRS.DeleteRow(sgViewKRS.Row);
+end;
+
+end.
+

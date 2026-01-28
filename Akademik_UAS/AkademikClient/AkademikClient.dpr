@@ -15,9 +15,9 @@ uses
   KRSModel in 'src\models\KRSModel.pas',
   DosenModel in 'src\models\DosenModel.pas',
   DaftarKrs in 'src\forms\Mahasiswa\DaftarKrs.pas' {FormDaftarKrs},
-  FormInputNilai in 'src\forms\Dosen\FormInputNilai.pas' {Form2},
-  FormLihatNilai in 'src\forms\Mahasiswa\FormLihatNilai.pas' {Form3},
-  MainMenuMahasiswa in 'src\forms\Mahasiswa\MainMenuMahasiswa.pas' {Form1},
+  FormInputNilai in 'src\forms\Dosen\FormInputNilai.pas' {FormNilaiDosen},
+  FormLihatNilai in 'src\forms\Mahasiswa\FormLihatNilai.pas' {FrmLihatNilai},
+  MainMenuMahasiswa in 'src\forms\Mahasiswa\MainMenuMahasiswa.pas' {MainForm},
   IPForm in 'src\forms\IPForm.pas' {Form4};
 
 {$R *.res}
@@ -29,9 +29,9 @@ begin
   // ✅ HANYA LOGIN
   Application.CreateForm(TFrmLogin, FrmLogin);
   Application.CreateForm(TFormDaftarKrs, FormDaftarKrs);
-  Application.CreateForm(TForm2, Form2);
-  Application.CreateForm(TForm3, Form3);
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TFormNilaiDosen, FormNilaiDosen);
+  Application.CreateForm(TFrmLihatNilai, FrmLihatNilai);
+  Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TForm4, Form4);
   Application.Run;
 end.

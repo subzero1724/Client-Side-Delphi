@@ -1,0 +1,80 @@
+object FormDaftarKrs: TFormDaftarKrs
+  Left = 0
+  Top = 0
+  Align = alClient
+  BorderStyle = bsNone
+  Caption = 'FormDaftarKrs'
+  ClientHeight = 615
+  ClientWidth = 885
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 80
+    Top = 64
+    Width = 215
+    Height = 23
+    Caption = 'Daftar KRS Mahasiswa'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object sgInputKRS: TStringGrid
+    Left = 80
+    Top = 128
+    Width = 297
+    Height = 233
+    TabOrder = 0
+    OnSelectCell = sgInputKRSSelectCell
+  end
+  object sgViewKRS: TStringGrid
+    Left = 428
+    Top = 128
+    Width = 293
+    Height = 233
+    TabOrder = 1
+    OnSelectCell = sgViewKRSSelectCell
+  end
+  object btnInput: TButton
+    Left = 220
+    Top = 367
+    Width = 117
+    Height = 50
+    Caption = 'Masukan'
+    TabOrder = 2
+  end
+  object btnHapus: TButton
+    Left = 464
+    Top = 367
+    Width = 117
+    Height = 50
+    Caption = 'Hapus'
+    TabOrder = 3
+  end
+  object btnSave: TButton
+    Left = 268
+    Top = 447
+    Width = 117
+    Height = 42
+    Caption = 'Simpan'
+    TabOrder = 4
+  end
+  object btnRefresh: TButton
+    Left = 428
+    Top = 447
+    Width = 117
+    Height = 42
+    Caption = 'Refresh'
+    TabOrder = 5
+    OnClick = btnRefreshClick
+  end
+end

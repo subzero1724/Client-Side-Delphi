@@ -1,7 +1,7 @@
-object Form2: TForm2
+object FormNilaiDosen: TFormNilaiDosen
   Left = 0
   Top = 0
-  Caption = 'Form2'
+  Caption = 'FormNilaiDosen'
   ClientHeight = 544
   ClientWidth = 519
   Color = clBtnFace
@@ -17,22 +17,15 @@ object Form2: TForm2
     Left = 24
     Top = 24
     Width = 457
-    Height = 457
+    Height = 425
     Caption = 'Form Penilaian'
     TabOrder = 0
     object Label1: TLabel
       Left = 88
-      Top = 88
+      Top = 136
       Width = 82
       Height = 13
       Caption = 'Nama Mahasiswa'
-    end
-    object Label2: TLabel
-      Left = 88
-      Top = 136
-      Width = 58
-      Height = 13
-      Caption = 'Mata Kuliah '
     end
     object Label6: TLabel
       Left = 170
@@ -41,46 +34,29 @@ object Form2: TForm2
       Height = 13
       Caption = 'Input Nilai Mahasiswa'
     end
-    object Label8: TLabel
+    object Label2: TLabel
       Left = 88
-      Top = 176
-      Width = 60
+      Top = 86
+      Width = 58
       Height = 13
-      Caption = 'Nama Dosen'
+      Caption = 'Mata Kuliah '
     end
-    object Edit1: TEdit
-      Left = 248
-      Top = 85
-      Width = 121
-      Height = 21
-      ReadOnly = True
-      TabOrder = 0
-      Text = 'Edit1'
-    end
-    object Edit2: TEdit
-      Left = 248
-      Top = 133
-      Width = 121
-      Height = 21
-      ReadOnly = True
-      TabOrder = 1
-      Text = 'Edit2'
-    end
-    object Button1: TButton
-      Left = 144
-      Top = 400
+    object btnSimpan: TButton
+      Left = 72
+      Top = 344
       Width = 137
       Height = 49
       Caption = 'Simpan'
-      TabOrder = 2
+      TabOrder = 0
+      OnClick = btnSimpanClick
     end
     object GroupBox2: TGroupBox
       Left = 72
-      Top = 232
+      Top = 176
       Width = 329
       Height = 153
       Caption = 'Input Nilai'
-      TabOrder = 3
+      TabOrder = 1
       object Label5: TLabel
         Left = 40
         Top = 116
@@ -97,7 +73,7 @@ object Form2: TForm2
       end
       object Label3: TLabel
         Left = 40
-        Top = 44
+        Top = 36
         Width = 29
         Height = 13
         Caption = 'Tugas'
@@ -109,29 +85,33 @@ object Form2: TForm2
         Height = 13
         Caption = 'Grade'
       end
-      object Edit4: TEdit
+      object Label8: TLabel
+        Left = 40
+        Top = 55
+        Width = 21
+        Height = 13
+        Caption = 'Quis'
+      end
+      object edtUts: TEdit
         Left = 104
         Top = 81
         Width = 121
         Height = 21
         TabOrder = 0
-        Text = 'Edit4'
       end
-      object Edit5: TEdit
+      object edtUAS: TEdit
         Left = 104
         Top = 108
         Width = 121
         Height = 21
         TabOrder = 1
-        Text = 'Edit5'
       end
-      object Edit3: TEdit
+      object edtTugas: TEdit
         Left = 104
-        Top = 41
+        Top = 33
         Width = 121
         Height = 21
         TabOrder = 2
-        Text = 'Edit3'
       end
       object Panel1: TPanel
         Left = 248
@@ -140,7 +120,7 @@ object Form2: TForm2
         Height = 60
         TabOrder = 3
       end
-      object Edit6: TEdit
+      object edtGrade: TEdit
         AlignWithMargins = True
         Left = 263
         Top = 70
@@ -154,16 +134,39 @@ object Form2: TForm2
         ParentFont = False
         ReadOnly = True
         TabOrder = 4
-        Text = 'A'
+      end
+      object edtQuis: TEdit
+        Left = 104
+        Top = 54
+        Width = 121
+        Height = 21
+        TabOrder = 5
       end
     end
-    object Edit7: TEdit
+    object cbMahasiswa: TComboBox
       Left = 248
-      Top = 173
-      Width = 121
+      Top = 133
+      Width = 117
       Height = 21
+      TabOrder = 2
+      Text = 'cbMahasiswa'
+    end
+    object cbMataKuliah: TComboBox
+      Left = 248
+      Top = 83
+      Width = 117
+      Height = 21
+      TabOrder = 3
+      Text = 'cbMataKuliah'
+    end
+    object btnRefresh: TButton
+      Left = 248
+      Top = 344
+      Width = 153
+      Height = 49
+      Caption = 'Refresh'
       TabOrder = 4
-      Text = 'Edit7'
+      OnClick = btnRefreshClick
     end
   end
 end
